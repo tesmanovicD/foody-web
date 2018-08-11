@@ -1,0 +1,79 @@
+// HeaderNavigation
+.header {
+    display: flex;
+    flex: 1;
+    justify-content: space-between;
+    align-items: center;
+    padding: 10px 20px;
+    background-color: #735397;
+    color: #fff;
+}
+
+.main {
+    display: flex;
+    flex: 1;
+    padding: 20px;
+    .left-sidebar {
+        flex: 0.5;
+        background-color: #735397;
+        margin-right: 40px;
+    }
+    .main-content {
+        flex: 3
+    }
+}
+
+.nav-item {
+    display: block;
+    border-bottom: 1px solid #eee;
+    color: #fff;
+    padding: 6px 15px;
+    font-size: 14px;
+}
+
+.card {
+    font-size: 14px;
+    border-radius: 0px;
+    .card-header {
+        color: #333333;
+        background-color: #DEDEDE;
+        border-radius: 0px;
+    }
+    
+    .card-title {
+        font-weight: 600;
+        margin: 0px;
+        font-size: 14px;
+    }
+
+    .card-control {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+        input {
+            max-height: 25px;
+            max-width: 160px;
+        }
+    }
+}
+
+.table-active {
+    background-color: rgba(238, 238, 238, 0.62);
+    td {
+        font-size: 10px;
+        padding: 6px;
+    }
+}
+
+.table-props {
+    &:nth-of-type(odd) {
+        background-color: #f9f9f9;
+    }
+    td {
+        padding: 6px;
+        font-size: 14px;
+        border-top: 1px solid #dddddd;
+    }
+}
+

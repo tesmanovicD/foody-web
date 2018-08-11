@@ -1,0 +1,100 @@
+@import url(~bootstrap/dist/css/bootstrap.min.css);
+.App {
+  text-align: center; }
+
+.App-logo {
+  animation: App-logo-spin infinite 20s linear;
+  height: 80px; }
+
+.App-header {
+  background-color: #222;
+  height: 150px;
+  padding: 20px;
+  color: white; }
+
+.App-title {
+  font-size: 1.5em; }
+
+.App-intro {
+  font-size: large; }
+
+@keyframes App-logo-spin {
+  from {
+    transform: rotate(0deg); }
+  to {
+    transform: rotate(360deg); } }
+
+.header {
+  display: flex;
+  flex: 1;
+  justify-content: space-between;
+  align-items: center;
+  padding: 10px 20px;
+  background-color: #735397;
+  color: #fff; }
+
+.main {
+  display: flex;
+  flex: 1;
+  padding: 20px; }
+  .main .left-sidebar {
+    flex: 0.5;
+    background-color: #735397;
+    margin-right: 40px; }
+  .main .main-content {
+    flex: 3; }
+
+.nav-item {
+  display: block;
+  border-bottom: 1px solid #eee;
+  color: #fff;
+  padding: 6px 15px;
+  font-size: 14px; }
+
+.card {
+  font-size: 14px;
+  border-radius: 0px; }
+  .card .card-header {
+    color: #333333;
+    background-color: #DEDEDE;
+    border-radius: 0px; }
+  .card .card-title {
+    font-weight: 600;
+    margin: 0px;
+    font-size: 14px; }
+  .card .card-control {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-bottom: 10px; }
+    .card .card-control input {
+      max-height: 25px;
+      max-width: 160px; }
+
+.table-active {
+  background-color: rgba(238, 238, 238, 0.62); }
+  .table-active td {
+    font-size: 10px;
+    padding: 6px; }
+
+.table-props:nth-of-type(odd) {
+  background-color: #f9f9f9; }
+
+.table-props td {
+  padding: 6px;
+  font-size: 14px;
+  border-top: 1px solid #dddddd; }
+
+body {
+  margin: 0;
+  padding: 0;
+  font-family: sans-serif; }
+
+h1, h2, h3, h4, h5, h6 {
+  margin: 0px; }
+
+a {
+  text-decoration: none; }
+  a:hover {
+    color: #fff;
+    text-decoration: none; }
