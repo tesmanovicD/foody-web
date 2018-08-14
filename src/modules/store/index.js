@@ -4,11 +4,17 @@ import thunk from 'redux-thunk'
 import user from '../reducers/userReducer'
 import customers from '../reducers/customerReducer'
 import employee from '../reducers/employeeReducer'
+import orders from '../reducers/orderReducer'
+import coupons from '../reducers/couponReducer'
+import foods from '../reducers/foodSectionReducer'
 
 const rootReducer = combineReducers({
     user,
     customers,
-    employee
+    employee,
+    orders,
+    coupons,
+    foods
 })
 
 const store = createStore(

@@ -15,9 +15,9 @@ router.get(["/", "/:id"], (req, res) => {
         console.log(err)
       } else {
         if (result.length == 0) {
-          return res.send("No employee")
+          return res.status(500).send("No employee")
         } else {
-          return res.json(result)
+          return res.status(200).json(result)
         }
       }
     })
@@ -31,7 +31,7 @@ router.post("/add", (req, res) => {
     }
 
     const ADD_EMPLOYEE = `INSERT INTO employee (username, password, fname, lname) 
-                          VALUES ('${username}', '${password}', '${fname}', ${lname})`
+                          VALUES ('${username}', '${password}', '${fname}', '${lname}')`
 
     conn.query(ADD_EMPLOYEE, (err, result) => {
         if (err) {

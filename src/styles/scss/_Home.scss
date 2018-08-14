@@ -31,10 +31,27 @@
     font-size: 14px;
 }
 
+.nav-dropdown {
+    background-color: #F7F7F7;
+    padding: 10px 15px;
+}
+
+.nav-dropdown-item {
+    display: block;
+    font-size: 13px;    
+    color: #444;
+    &:hover {
+        color: #444;
+    }
+}
+
 .card {
     font-size: 14px;
     border-radius: 0px;
     .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
         color: #333333;
         background-color: #DEDEDE;
         border-radius: 0px;

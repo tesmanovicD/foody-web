@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import actions from '../../../modules/actions';
+import TextInput from '../../../containers/TextInput';
 
 class CustomerEdit extends Component {
 
@@ -31,16 +32,23 @@ class CustomerEdit extends Component {
 
   render() {
     const { customer } = this.state
+  
     return (
-      <div>
+      <div className="card">
+        <div className="card-header">
+          <h6 className="card-title">Edit Customer</h6>
+        </div>
+        <div className="card-body">
         <form onSubmit={this.submitEditedCustomer}>
-          <input type='text' name='fname' defaultValue={customer.fname} onChange={this.handleChange} />
-          <input type='text' name='lname' defaultValue={customer.lname} onChange={this.handleChange} />
-          <input type='email' name='email' defaultValue={customer.email} onChange={this.handleChange} />
-          <input type='phone' name='phone' defaultValue={customer.phone} onChange={this.handleChange} />
-
-          <button type='submit'>Submit</button>
+          <TextInput name='fname' label='First Name' defVal={customer.fname} action={this.handleChange.bind(this)} />
+          <TextInput name='lname' label='Last Name' defVal={customer.lname} action={this.handleChange.bind(this)} />
+          <TextInput name='email' type='email' label='Email' defVal={customer.email} action={this.handleChange.bind(this)} />
+          <TextInput name='phone' type='phone' label='Phone' defVal={customer.phone} action={this.handleChange.bind(this)} />
+          <div className='col-sm-9 offset-md-3'>
+            <button type='submit' className='btn btn-purple btn-loading'>Submit</button>
+          </div>
         </form>
+        </div>
       </div>
     )
   }

@@ -5,10 +5,6 @@ import Worker from './Worker'
 
 class Employee extends Component {
 
-	state = {
-		loaded: false
-	}
-
 	componentDidMount() {
 		this.props.dispatch(actions.employee.getAllEmployee())
 		.then(() => this.setState({ loaded: true }))
@@ -16,7 +12,7 @@ class Employee extends Component {
 	}
 
 	deleteEmployee = (id) => {
-		// this.props.dispatch(actions.customers.deleteCustomer(id))
+		this.props.dispatch(actions.employee.deleteEmployee(id))
 	}
 
 	editEmployee = (id) => {
@@ -24,11 +20,13 @@ class Employee extends Component {
 	}
 
   render() {
+	const tableRows = ['Customer Name', 'Username', 'Action']
+
     return (
 			<div className="card">
 			<div className="card-header">
 					<h6 className="card-title">Employee Management</h6>
-					<div className="clearfix"></div>
+					<button className='btn btn-primary btn-sm' onClick={() => this.props.history.push('/employee/add')}>Add Employee</button>
 			</div>
 			<div className="card-body">
 				<div className='card-control'>
@@ -39,14 +37,16 @@ class Employee extends Component {
 				<table className='table table-stripped'>
 					<thead>
 						<tr className='table-active'>
-							<td>Customer Name</td>
-							<td>Username</td>
-							<td>Action</td>
+							{tableRows.map((rowName, key) => <td key={key}>{rowName}</td>)}
 						</tr>
 					</thead>
 					<tbody>
-						{this.state.loaded &&
-							this.props.employee.employee.map(e => <Worker key={e.id} employee={e} deleteEmployee={this.deleteEmployee} editEmployee={this.editEmployee} />)
+						{this.props.employee.length ?
+							this.props.employee.map(e => <Worker key={e.id} employee={e} deleteEmployee={this.deleteEmployee} editEmployee={this.editEmployee} />)
+							:
+							<tr className='table-props'>
+								<td colSpan={tableRows.length} className='text-center'>No data available in table</td>
+							</tr>
 						}
 					</tbody>
 				</table>
@@ -58,7 +58,7 @@ class Employee extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-		employee: state.employee
+		employee: state.employee.employee
 	}
 }
 

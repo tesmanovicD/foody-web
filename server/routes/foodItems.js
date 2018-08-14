@@ -15,9 +15,9 @@ router.get(["/", "/:id"], (req, res) => {
         console.log("err")
       } else {
         if (result.length == 0) {
-          return res.send("No foods")
+          return res.status(500).send("No foods")
         } else {
-          return res.json(result)
+          return res.status(200).json(result)
         }
       }
     })

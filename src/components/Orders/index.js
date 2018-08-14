@@ -1,32 +1,33 @@
 import React, { Component } from 'react'
 import actions from '../../modules/actions';
 import { connect } from 'react-redux';
-import Customer from './Customer/Customer';
 
-class Customers extends Component {
+import Order from './Order'
+
+class Orders extends Component {
 
 	componentDidMount() {
-		this.props.dispatch(actions.customers.getAllCustomers())
+		this.props.dispatch(actions.orders.getAllOrders())
 		.then(() => this.setState({ loaded: true }))
 		.catch(err => console.log(err))
 	}
 
-	deleteCustomer = (id) => {
-		this.props.dispatch(actions.customers.deleteCustomer(id))
+	deleteEmployee = (id) => {
+		this.props.dispatch(actions.orders.deleteOrder(id))
 	}
 
-	editCustomer = (id) => {
-		this.props.history.push(`/customers/edit/${id}`)
+	editOrder = (id) => {
+		this.props.history.push(`/orders/edit/${id}`)
 	}
 
   render() {
-	const tableRows = ['Customer Name', 'Email', 'Phone', 'Action']
+	const tableRows = ['Food Name', 'Customer Name', 'Quantity', 'Price', 'Order Date', 'Pickup date(approx)', 'Action']
 
     return (
-		<div className="card">
+			<div className="card">
 			<div className="card-header">
-				<h6 className="card-title">Customer Management</h6>
-				<div className="clearfix"></div>
+					<h6 className="card-title">Order Management</h6>
+					<div className="clearfix"></div>
 			</div>
 			<div className="card-body">
 				<div className='card-control'>
@@ -41,8 +42,8 @@ class Customers extends Component {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.customers.length ?
-							this.props.customers.map(c => <Customer key={c.id} customer={c} deleteCustomer={this.deleteCustomer} editCustomer={this.editCustomer} />)
+						{this.props.orders.length ?
+							this.props.orders.map(o => <Order key={o.id} order={o} deleteOrder={this.deleteOrder} editOrder={this.editOrder} />)
 							:
 							<tr className='table-props'>
 								<td colSpan={tableRows.length} className='text-center'>No data available in table</td>
@@ -51,15 +52,15 @@ class Customers extends Component {
 					</tbody>
 				</table>
 			</div>
-    	</div>
-    	)
-  	}
+		</div>
+    )
+  }
 }
 
 const mapStateToProps = (state) => {
 	return {
-		customers: state.customers.customers
+		orders: state.orders.orders
 	}
 }
 
-export default connect(mapStateToProps)(Customers)
+export default connect(mapStateToProps)(Orders)

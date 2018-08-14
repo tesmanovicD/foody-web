@@ -15,9 +15,9 @@ router.get(["/", "/:id"], (req, res) => {
         console.log(err)
       } else {
         if (result.length == 0) {
-          return res.send("No customers")
+          return res.status(500).send("No customers")
         } else {
-          return res.json(result)
+          return res.status(200).json(result)
         }
       }
     })
