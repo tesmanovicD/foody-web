@@ -81,4 +81,26 @@ router.delete('/delete/:id', (req, res) => {
     }
 })
 
+router.post('/authenticate', (req, res) => {
+    const { username, password } = req.body
+    console.log(req.body)
+
+    if ( !username || !password) {
+        return res.status(500).send("You must enter username and password")
+    }
+
+    const AUTHENTICATE_USER = `SELECT fname, lname FROM customers WHERE email = "${email}" AND password = "${password}" `
+    conn.query(AUTHENTICATE_USER, (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            if (result.length == 0) {
+                return res.status(500).send("Wrong username or password")
+            } else {
+                return res.status(200).send(result)
+            }
+        }
+    })
+})
+
 module.exports = router
