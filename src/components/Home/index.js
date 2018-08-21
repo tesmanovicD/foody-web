@@ -16,6 +16,10 @@ import CategoryEdit from '../FoodSection/Categories/CategoryEdit';
 import Items from '../FoodSection/Items';
 import ItemAdd from '../FoodSection/Items/ItemAdd';
 import ItemEdit from '../FoodSection/Items/ItemEdit';
+import CouponAdd from '../Coupons/Coupon/CouponAdd';
+import CouponEdit from '../Coupons/Coupon/CouponEdit';
+import { FaUserCircle } from 'react-icons/fa';
+import Icons from '../../containers/Icons';
 
 class Home extends Component {
 
@@ -29,12 +33,10 @@ class Home extends Component {
     return (
       <div>
         <div className='header'>
-          <div className='header-title'>
-            <h5>Foody Cart</h5>
-          </div>
+          <h5 className='header-title'>Foody Cart</h5>
 
           <div className='header-account'>
-            <span>userIcon</span>
+            <span><Icons size={35} color="white"><FaUserCircle /></Icons></span>
           </div>
         </div>
 
@@ -58,6 +60,8 @@ class Home extends Component {
               <Route path='/food/items/edit/:id' component={ItemEdit} />
               <Route exact path='/orders' component={Orders} />
               <Route exact path='/coupons' component={Coupons} />
+              <Route path='/coupons/add' component={CouponAdd} />
+              <Route path='/coupons/edit/:id' component={CouponEdit} />
             </Switch>
           </div>
         </div>

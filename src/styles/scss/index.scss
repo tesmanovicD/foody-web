@@ -58,3 +58,15 @@ a {
     font-size: 14px;
 }
 
+.form-label {
+    text-align: right;
+}
+
+.fa-icons {
+    margin: 0px 5px 2px 0px;
+    &:hover {
+        cursor: pointer;
+    }
+}
+
+

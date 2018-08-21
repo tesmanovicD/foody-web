@@ -2,6 +2,7 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import TextInput from '../../../../containers/TextInput'
+import SelectOptions from '../../../../containers/SelectOptions'
 import actions from '../../../../modules/actions'
 
 class ItemAdd extends Component {
@@ -10,9 +11,14 @@ class ItemAdd extends Component {
     item: {
         name: '',
         description: '',
-        category: '',
-        price: ''
+        category: 'choose',
+        price: '',
+        quantity: ''
     }
+  }
+
+  componentDidMount() {
+    this.props.dispatch(actions.foods.getAllCategories())
   }
 
   handleChange = (e) => {
@@ -39,11 +45,10 @@ class ItemAdd extends Component {
 					<form onSubmit={this.addItem}>
 						<TextInput name='name' label='Name' defVal={item.name} action={this.handleChange.bind(this)} />
 						<TextInput name='description' label='Description' defVal={item.description} action={this.handleChange.bind(this)} />
-						{/* <select>
-							<option value='default'>- choose -</option>
-
-						</select> */}
+            <SelectOptions name='category' label="Category" defVal={item.category} opt={this.props.categories} action={this.handleChange.bind(this)} />
 						<TextInput name='price' label='Price' type='number' defVal={item.price} action={this.handleChange.bind(this)} />
+						<TextInput name='quantity' label='Quantity' type='number' defVal={item.quantity} action={this.handleChange.bind(this)} />
+
 						<div className='col-sm-9 offset-md-3'>
 							<button type='submit' className='btn btn-purple btn-loading'>Submit</button>
 						</div>
@@ -56,7 +61,7 @@ class ItemAdd extends Component {
 
 const mapStateToProps = (state) => {
 	return {
-
+    categories: state.foods.categories
 	}
 }
 
