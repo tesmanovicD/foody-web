@@ -3,11 +3,19 @@ import { connect } from 'react-redux';
 
 import Item from './Item';
 import actions from '../../../modules/actions';
+import Icons from '../../../containers/Icons';
+import { FaPlus } from 'react-icons/fa';
 
 class Items extends Component {
 
+	state = {
+		searchTerm: '',
+		currentlyDisplayed: []
+	}
+
 	componentDidMount() {
 		this.props.dispatch(actions.foods.getAllItems())
+		.then(() => this.setState({ currentlyDisplayed: this.props.items }))
 		.catch(err => console.log(err))
 	}
 
@@ -18,6 +26,16 @@ class Items extends Component {
 	editItem = (id) => {
 		this.props.history.push(`/food/items/edit/${id}`)
 	}
+    
+  onInputChange = (e) => {
+		let filteredItems = this.props.items.filter(
+			(item) => item.name.toLowerCase().includes(e.target.value.toLowerCase())
+		)
+		this.setState({
+			searchTerm: e.target.value,
+			currentlyDisplayed: filteredItems
+		})
+	}
 
   render() {
 	const tableRows = ['Name', 'Description', 'Category', 'Price', 'Action']
@@ -26,12 +44,14 @@ class Items extends Component {
 			<div className="card">
         <div className="card-header">
             <h6 className="card-title">Item Management</h6>
-            <button className='btn btn-primary btn-sm' onClick={() => this.props.history.push('/food/items/add')}>Add Item</button>
+            <button className='btn btn-primary btn-sm' onClick={() => this.props.history.push('/food/items/add')}>
+                <Icons size={14} color="white"><FaPlus /></Icons>Add Item
+            </button>
         </div>
         <div className="card-body">
             <div className='card-control'>
                 <span>Show <select><option>25</option></select> entries</span>
-                <span>Search: <input type='text' /> </span>
+                <span>Search: <input type='text' value={this.state.searchTerm} onChange={this.onInputChange} /> </span>
             </div>
 
             <table className='table table-stripped'>
@@ -41,8 +61,8 @@ class Items extends Component {
                     </tr>
                 </thead>
                 <tbody>
-                    {this.props.items.length ?
-                        this.props.items.map(i => 
+                    {this.state.currentlyDisplayed.length ?
+                        this.state.currentlyDisplayed.map(i => 
                             <Item key={i.id} item={i} deleteItem={this.deleteItem} editItem={this.editItem} />)
                         :
                         <tr className='table-props'>

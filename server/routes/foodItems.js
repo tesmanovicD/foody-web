@@ -54,7 +54,7 @@ router.post("/add", (req, res) => {
     }
 
     const ADD_FOOD_ITEM = `INSERT INTO food_items (name, description, category, price, quantity) 
-                          VALUES ('${name}', '${description}', '${category}', '${price}', ${quantity})`
+                          VALUES ('${name}', '${description}', '${category}', ${price}, ${quantity})`
 
     conn.query(ADD_FOOD_ITEM, (err, result) => {
         if (err) {

@@ -32,6 +32,9 @@
   padding: 10px 20px;
   background-color: #735397;
   color: #fff; }
+  .header .header-title {
+    font-weight: 600;
+    font-size: 18px; }
 
 .main {
   display: flex;
@@ -145,5 +148,13 @@ a {
   display: flex;
   align-items: center;
   font-size: 14px; }
+
+.form-label {
+  text-align: right; }
+
+.fa-icons {
+  margin: 0px 5px 2px 0px; }
+  .fa-icons:hover {
+    cursor: pointer; }
 
 /*# sourceMappingURL=index.css.map */

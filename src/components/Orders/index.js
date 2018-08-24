@@ -6,9 +6,14 @@ import Order from './Order'
 
 class Orders extends Component {
 
+	state = {
+		searchTerm: '',
+		currentlyDisplayed: []
+	}
+
 	componentDidMount() {
 		this.props.dispatch(actions.orders.getAllOrders())
-		.then(() => this.setState({ loaded: true }))
+		.then(() => this.setState({ currentlyDisplayed: this.props.orders }))
 		.catch(err => console.log(err))
 	}
 
@@ -18,6 +23,16 @@ class Orders extends Component {
 
 	editOrder = (id) => {
 		this.props.history.push(`/orders/edit/${id}`)
+	}
+
+	onInputChange = (e) => {
+		let filteredOrders = this.props.orders.filter(
+			(order) => order.foodName.toLowerCase().includes(e.target.value.toLowerCase())
+		)
+		this.setState({
+			searchTerm: e.target.value,
+			currentlyDisplayed: filteredOrders
+		})
 	}
 
   render() {
@@ -32,7 +47,7 @@ class Orders extends Component {
 			<div className="card-body">
 				<div className='card-control'>
 					<span>Show <select><option>25</option></select> entries</span>
-					<span>Search: <input type='text' /> </span>
+					<span>Search: <input type='text' value={this.state.searchTerm} onChange={this.onInputChange} /> </span>
 				</div>
 
 				<table className='table table-stripped'>
@@ -42,8 +57,8 @@ class Orders extends Component {
 						</tr>
 					</thead>
 					<tbody>
-						{this.props.orders.length ?
-							this.props.orders.map(o => <Order key={o.id} order={o} deleteOrder={this.deleteOrder} editOrder={this.editOrder} />)
+						{this.state.currentlyDisplayed.length ?
+							this.state.currentlyDisplayed.map(o => <Order key={o.id} order={o} deleteOrder={this.deleteOrder} editOrder={this.editOrder} />)
 							:
 							<tr className='table-props'>
 								<td colSpan={tableRows.length} className='text-center'>No data available in table</td>

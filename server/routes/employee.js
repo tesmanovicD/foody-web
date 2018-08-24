@@ -82,7 +82,6 @@ router.delete('/delete/:id', (req, res) => {
 
 router.post('/authenticate', (req, res) => {
     const { username, password } = req.body
-    console.log(req.body)
 
     if ( !username || !password) {
         return res.status(500).send("You must enter username and password")

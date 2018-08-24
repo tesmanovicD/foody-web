@@ -1,4 +1,8 @@
 import React from 'react'
+import moment from 'moment'
+
+import Icons from '../../../containers/Icons'
+import { FaTrashAlt, FaEdit } from 'react-icons/fa'
 
 const Coupon = (props) => (
         <tr className='table-props'>
@@ -7,11 +11,19 @@ const Coupon = (props) => (
             <td>{props.coupon.discount}</td>
             <td>{props.coupon.usage_limit}</td>
             <td>{props.coupon.used_coupons}</td>
-            <td>{props.coupon.end_date}</td>
-            <td>{props.coupon.enabled}</td>        
+            <td>{moment.unix(props.coupon.end_date).format('DD/MM/YYYY')}</td>
+            <td>{props.coupon.status}</td>        
             <td>
-                <span onClick={() => props.deleteCoupon(props.coupon.id)}>Delete</span>
-                <span onClick={() => props.editCoupon(props.coupon.id)}>Edit</span>
+                <span onClick={() => props.editCoupon(props.coupon.id)}>
+                    <Icons title="Edit">
+                        <FaEdit />
+                    </Icons>
+                </span>
+                <span onClick={() => props.deleteCoupon(props.coupon.id)}>
+                    <Icons title="Delete">
+                        <FaTrashAlt />
+                    </Icons>
+                </span>
             </td>
         </tr>
 )

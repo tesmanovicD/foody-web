@@ -6,9 +6,11 @@ const conn = require('../config')
 router.get(["/", "/:id"], (req, res) => {
     const id = req.params.id ? req.params.id : null
     const SELECT_COUPONS = id ?
-      `SELECT * FROM coupons WHERE id = ${id}`
+      `SELECT id, code, type, discount, usage_limit, used_coupons, 
+      UNIX_TIMESTAMP(start_date) as start_date, UNIX_TIMESTAMP(end_date) as end_date, status FROM coupons WHERE id = ${id}`
       :
-      `SELECT * FROM coupons`
+      `SELECT id, code, type, discount, usage_limit, used_coupons, 
+      UNIX_TIMESTAMP(start_date) as start_date, UNIX_TIMESTAMP(end_date) as end_date, status FROM coupons`
     
     conn.query(SELECT_COUPONS, (err, result) => {
       if (err) {
@@ -24,18 +26,18 @@ router.get(["/", "/:id"], (req, res) => {
 })
 
 router.post("/add", (req, res) => {
-    const { code, type, discount, usageLimit, startDate, endDate } = req.body
+    const { code, discountType, discount, usageLimit, startDate, endDate, status } = req.body
 
-    if (!code || !type || !discount || !usageLimit || !startDate || !endDate) {
+    if (!code || !discountType || !discount || !usageLimit || !startDate || !endDate) {
         return res.status(500).send("You must fill required fields")
     }
 
-    const ADD_COUPON = `INSERT INTO customers (code, type, start_date, discount, usage_limit, end_date) 
-                          VALUES ('${code}', '${type}', '${startDate}', ${discount}, ${usageLimit}, '${endDate}')`
+    const ADD_COUPON = `INSERT INTO coupons (code, type, start_date, discount, usage_limit, end_date, status) 
+                          VALUES ('${code}', '${discountType}', '${startDate}', ${discount}, ${usageLimit}, '${endDate}', '${status}')`
 
     conn.query(ADD_COUPON, (err, result) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send(err)
         } else {
             return res.status(200).send(`Coupon ${code} added succesfully`)
         }
@@ -43,15 +45,15 @@ router.post("/add", (req, res) => {
 })
 
 router.put("/edit", (req, res) => {
-    const { id, code, type, discount, usageLimit, startDate, endDate } = req.body
+    const { id, code, discountType, discount, usageLimit, startDate, endDate, status } = req.body
 
-    if (!id || !code || !type || !discount || !usageLimit || !startDate || !endDate) {
+    if (!id || !code || !discountType || !discount || !usageLimit || !startDate || !endDate) {
         return res.status(500).send("You must fill required fields")
     }
 
     const UPDATE_COUPON = `UPDATE coupons SET 
-                            code= "${code}", type= "${type}", start_date= "${startDate}", discount= ${discount}, usage_limit= ${usageLimit}
-                            end_date= '${endDate}'
+                            code= '${code}', type= '${discountType}', start_date= '${startDate}', discount= ${discount}, usage_limit= ${usageLimit},
+                            end_date= '${endDate}', status= '${status}'
                             WHERE id= ${id}`
 
     conn.query(UPDATE_COUPON, (err, result) => {

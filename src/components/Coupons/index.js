@@ -3,6 +3,8 @@ import actions from '../../modules/actions';
 import { connect } from 'react-redux';
 
 import Coupon from './Coupon';
+import Icons from '../../containers/Icons';
+import { FaPlus } from 'react-icons/fa';
 
 class Coupons extends Component {
 
@@ -13,7 +15,7 @@ class Coupons extends Component {
 	}
 
 	deleteCoupon = (id) => {
-		this.props.dispatch(actions.customers.deleteCoupon(id))
+		this.props.dispatch(actions.coupons.deleteCoupon(id))
 	}
 
 	editCoupon = (id) => {
@@ -27,7 +29,9 @@ class Coupons extends Component {
 			<div className="card">
         <div className="card-header">
             <h6 className="card-title">Coupon Management</h6>
-            <button className='btn btn-primary btn-sm' onClick={() => this.props.history.push('/coupons/add')}>Add Coupon</button>
+            <button className='btn btn-primary btn-sm' onClick={() => this.props.history.push('/coupons/add')}>
+				<Icons size={14} color="white"><FaPlus /></Icons>Add Coupon
+			</button>
         </div>
         <div className="card-body">
 					<div className='card-control'>

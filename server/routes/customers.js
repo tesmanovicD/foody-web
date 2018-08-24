@@ -43,7 +43,6 @@ router.post("/add", (req, res) => {
 })
 
 router.put("/edit", (req, res) => {
-    console.log(req.body)
     const { id, email, password, fname, lname, phone } = req.body
 
     if (!id || !email || !password || !fname || !lname) {
