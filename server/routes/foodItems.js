@@ -23,6 +23,29 @@ router.get(["/", "/:id"], (req, res) => {
     })
 })
 
+router.get("/category/:id", (req, res) => {
+    const id = req.params.id
+    const SELECT_FOOD_ITEMS_FROM_CATEGORY = `SELECT * FROM food_items WHERE category = ${id}`
+
+    if (!id) {
+        return res.status(500).send("You must provide ID")
+    }
+
+    conn.query(SELECT_FOOD_ITEMS_FROM_CATEGORY, (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            if (result.length == 0) {
+                return res.status(500).send("No food in this category")
+            } else {
+                return res.status(200).json(result)
+            }
+        }
+    })
+
+
+})
+
 router.post("/add", (req, res) => {
     const { name, description, category, price, quantity } = req.body
 
