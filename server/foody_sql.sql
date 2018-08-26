@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 20, 2018 at 08:41 PM
+-- Generation Time: Aug 26, 2018 at 07:40 PM
 -- Server version: 5.7.21
 -- PHP Version: 5.6.35
 
@@ -137,14 +137,15 @@ CREATE TABLE IF NOT EXISTS `food_items` (
   `price` smallint(6) NOT NULL,
   `quantity` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `food_items`
 --
 
 INSERT INTO `food_items` (`id`, `name`, `description`, `category`, `price`, `quantity`) VALUES
-(1, 'Daniel', 'opis', 13, 22, 1);
+(1, 'Margarita', 'opis', 13, 22, 1),
+(2, 'Testenina', 'ovo je opis', 13, 48, 3);
 
 -- --------------------------------------------------------
 
@@ -155,15 +156,33 @@ INSERT INTO `food_items` (`id`, `name`, `description`, `category`, `price`, `qua
 DROP TABLE IF EXISTS `order_items`;
 CREATE TABLE IF NOT EXISTS `order_items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
-  `id_food` int(11) NOT NULL,
-  `id_customer` int(11) NOT NULL,
+  `id_order` int(11) NOT NULL,
+  `id_item` int(11) NOT NULL,
   `quantity` tinyint(4) NOT NULL,
   `price` smallint(6) NOT NULL,
-  `status` tinyint(1) NOT NULL,
-  `date` datetime NOT NULL DEFAULT CURRENT_TIMESTAMP,
-  `pickup_date` datetime NOT NULL,
-  PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+  `total` smallint(6) NOT NULL,
+  PRIMARY KEY (`id`),
+  KEY `id_order` (`id_order`),
+  KEY `id_item` (`id_item`)
+) ENGINE=InnoDB AUTO_INCREMENT=2 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `order_items`
+--
+
+INSERT INTO `order_items` (`id`, `id_order`, `id_item`, `quantity`, `price`, `total`) VALUES
+(1, 43, 2, 2, 48, 96);
+
+--
+-- Triggers `order_items`
+--
+DROP TRIGGER IF EXISTS `quantityUpdate`;
+DELIMITER $$
+CREATE TRIGGER `quantityUpdate` AFTER INSERT ON `order_items` FOR EACH ROW BEGIN
+	UPDATE food_items SET quantity = quantity - NEW.quantity WHERE food_items.id = NEW.id_item;
+	END
+$$
+DELIMITER ;
 
 -- --------------------------------------------------------
 
@@ -175,10 +194,39 @@ DROP TABLE IF EXISTS `order_payments`;
 CREATE TABLE IF NOT EXISTS `order_payments` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `id_customer` int(11) NOT NULL,
-  `amount` smallint(6) NOT NULL,
-  `date` int(11) NOT NULL,
+  `date` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
+  `price` smallint(15) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=44 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+
+--
+-- Dumping data for table `order_payments`
+--
+
+INSERT INTO `order_payments` (`id`, `id_customer`, `date`, `price`) VALUES
+(32, 8, '2018-08-26 14:25:18', 0),
+(33, 8, '2018-08-26 14:26:13', 0),
+(34, 8, '2018-08-26 14:40:27', 0),
+(35, 8, '2018-08-26 14:41:42', 0),
+(36, 8, '2018-08-26 14:45:40', 0),
+(37, 8, '2018-08-26 14:47:09', 0),
+(38, 8, '2018-08-26 14:49:58', 0),
+(39, 8, '2018-08-26 15:05:13', 262),
+(40, 8, '2018-08-26 15:06:18', 214),
+(41, 8, '2018-08-26 18:10:29', 48),
+(42, 8, '2018-08-26 18:10:37', 48),
+(43, 8, '2018-08-26 19:39:06', 96);
+
+--
+-- Constraints for dumped tables
+--
+
+--
+-- Constraints for table `order_items`
+--
+ALTER TABLE `order_items`
+  ADD CONSTRAINT `order_items_ibfk_1` FOREIGN KEY (`id_order`) REFERENCES `order_payments` (`id`) ON DELETE CASCADE ON UPDATE CASCADE,
+  ADD CONSTRAINT `order_items_ibfk_2` FOREIGN KEY (`id_item`) REFERENCES `food_items` (`id`) ON DELETE CASCADE ON UPDATE CASCADE;
 COMMIT;
 
 /*!40101 SET CHARACTER_SET_CLIENT=@OLD_CHARACTER_SET_CLIENT */;

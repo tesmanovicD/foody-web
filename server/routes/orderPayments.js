@@ -24,20 +24,41 @@ router.get(["/", "/:id"], (req, res) => {
 })
 
 router.post("/add", (req, res) => {
-    const { idCustomer, amount } = req.body
+    const { idCustomer } = req.body
 
-    if (!idCustomer || !amount) {
+    if (!idCustomer) {
         return res.status(500).send("You must fill required fields")
     }
 
-    const ADD_ORDER_PAYMENT = `INSERT INTO order_payments (id_customer, amount) 
-                          VALUES ('${idCustomer}', '${amount}')`
+    const ADD_ORDER_PAYMENT = `INSERT INTO order_payments (id_customer) 
+                          VALUES ('${idCustomer}')`
 
     conn.query(ADD_ORDER_PAYMENT, (err, result) => {
         if (err) {
             console.log(err)
         } else {
-            return res.status(200).send(`Order added succesfully`)
+            const lastId = result.insertId
+            return res.status(200).json({lastId})
+        }
+    })
+})
+
+router.put("/edit", (req, res) => {
+    const { id, price } = req.body
+
+    if (!id || !price) {
+        return res.status(500).send("You must fill required fields")
+    }
+
+    const UPDATE_ORDER_PAYMENTS = `UPDATE order_payments SET 
+                            price= ${price}
+                            WHERE id= ${id}`
+
+    conn.query(UPDATE_ORDER_PAYMENTS, (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.status(200).send(`Order ID ${id} edited succesfully`)
         }
     })
 })

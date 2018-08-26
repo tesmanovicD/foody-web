@@ -88,7 +88,7 @@ router.post('/authenticate', (req, res) => {
         return res.status(500).send("You must enter username and password")
     }
 
-    const AUTHENTICATE_USER = `SELECT fname, lname FROM customers WHERE email = "${email}" AND password = "${password}" `
+    const AUTHENTICATE_USER = `SELECT id, fname, lname FROM customers WHERE email = "${email}" AND password = "${password}" `
     conn.query(AUTHENTICATE_USER, (err, result) => {
         if (err) {
             console.log(err)

@@ -87,7 +87,7 @@ router.post('/authenticate', (req, res) => {
         return res.status(500).send("You must enter username and password")
     }
 
-    const AUTHENTICATE_USER = `SELECT fname, lname FROM employee WHERE username = "${username}" AND password = "${password}" `
+    const AUTHENTICATE_USER = `SELECT id, fname, lname FROM employee WHERE username = "${username}" AND password = "${password}" `
     conn.query(AUTHENTICATE_USER, (err, result) => {
         if (err) {
             console.log(err)
@@ -95,7 +95,7 @@ router.post('/authenticate', (req, res) => {
             if (result.length == 0) {
                 return res.status(500).send("Wrong username or password")
             } else {
-                return res.status(200).send(result)
+                return res.status(200).send(...result)
             }
         }
     })

@@ -24,34 +24,38 @@ router.get(["/", "/:id"], (req, res) => {
 })
 
 router.post("/add", (req, res) => {
-    const { idFood, idCustomer, quantity, price, status, date, pickupDate } = req.body
+	const { items, lastId } = req.body
 
-    if (!idFood || !idCustomer || !quantity || !price || !status || date || pickupDate) {
-        return res.status(500).send("You must fill required fields")
-    }
+		
+    const ADD_ORDER_ITEM = `INSERT INTO order_items (id_order, id_item, quantity, price, total) VALUES ?`
+    
+    let values = [...items.map(i => {
+        return [
+            lastId, i.id, i.quantity, i.price, i.quantity * i.price
+        ]
+    })]
 
-    const ADD_ORDER_ITEM = `INSERT INTO order_items (id_food, id_customer, quantity, price, status, date, pickup_date) 
-                          VALUES (${idFood}, ${idCustomer}, ${quantity}, ${price}, '${status}', '${date}', '${pickupDate}')`
-
-    conn.query(ADD_ORDER_ITEM, (err, result) => {
+    conn.query(ADD_ORDER_ITEM, [values], (err, result) => {
         if (err) {
             console.log(err)
+            return res.status(500).send("error")
         } else {
-            return res.status(200).send(`Order ${idFood} added succesfully`)
+            return res.status(200).send(`Items added succesfully`)
         }
-    })
+    });
+
 })
 
 router.put("/edit", (req, res) => {
-    const { id, idFood, idCustomer, price, quantity, status, date, pickupDate } = req.body
+    const { id, idOrder, item, price, quantity, total } = req.body
 
-    if (!id || !idFood || !idCustomer || !price || !quantity || !status || !date || !pickupDate) {
+    if (!id || !idOrder || !item || !quantity || !price || !total) {
         return res.status(500).send("You must fill required fields")
     }
 
     const UPDATE_ORDER_ITEM = `UPDATE order_items SET 
-                            id_food= ${idFood}, id_customer= ${idCustomer}, price= ${price}, quantity= ${fname}, 
-                            status= "${status}", date= "${date}", pickup_date= "${pickupDate}"
+                            name= ${name}, item= ${item}, quantity= ${quantity}, price= ${price}, 
+                            total= "${total}"
                             WHERE id= ${id}`
 
     conn.query(UPDATE_ORDER_ITEM, (err, result) => {
