@@ -24,14 +24,14 @@ router.get(["/", "/:id"], (req, res) => {
 })
 
 router.post("/add", (req, res) => {
-    const { idCustomer } = req.body
-
+    const { idCustomer, orderNo } = req.body
+    
     if (!idCustomer) {
         return res.status(500).send("You must fill required fields")
     }
 
-    const ADD_ORDER_PAYMENT = `INSERT INTO order_payments (id_customer) 
-                          VALUES ('${idCustomer}')`
+    const ADD_ORDER_PAYMENT = `INSERT INTO order_payments (id_customer, order_no) 
+                          VALUES ('${idCustomer}', '${orderNo}')`
 
     conn.query(ADD_ORDER_PAYMENT, (err, result) => {
         if (err) {
