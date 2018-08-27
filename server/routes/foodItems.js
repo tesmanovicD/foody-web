@@ -1,7 +1,16 @@
 const express = require('express')
 const router = express.Router()
 const conn = require('../config')
-
+const multer = require('multer')
+const storage = multer.diskStorage({
+    destination: function(req, file, cb) {
+        cb(null, "./uploads/userAvatars/");
+    },
+    filename: function(req, file, cb) {
+        cb(null, Math.random().toFixed(2) + "_"+file.originalname);
+    }
+})
+const upload = multer({storage: storage});
 
 router.get(["/", "/:id"], (req, res) => {
     const id = req.params.id ? req.params.id : null
@@ -46,15 +55,16 @@ router.get("/category/:id", (req, res) => {
 
 })
 
-router.post("/add", (req, res) => {
+router.post("/add", upload.single('image'), (req, res) => {
     const { name, description, category, price, quantity } = req.body
+    const image = req.file? req.file.filename : "no_image.png"; 
 
     if (!name || !description || !category || !price || !quantity) {
         return res.status(500).send("You must fill required fields")
     }
 
-    const ADD_FOOD_ITEM = `INSERT INTO food_items (name, description, category, price, quantity) 
-                          VALUES ('${name}', '${description}', '${category}', ${price}, ${quantity})`
+    const ADD_FOOD_ITEM = `INSERT INTO food_items (name, description, category, image, price, quantity) 
+                          VALUES ('${name}', '${description}', '${category}', ${image}, ${price}, ${quantity})`
 
     conn.query(ADD_FOOD_ITEM, (err, result) => {
         if (err) {

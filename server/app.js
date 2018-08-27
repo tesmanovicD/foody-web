@@ -18,6 +18,7 @@ app.options("*", cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', routes)
+app.use('/uploads/food', express.static("uploads/food"));
 
 app.listen(PORT, () => {
     console.log(`Listening on port ${PORT}`)
