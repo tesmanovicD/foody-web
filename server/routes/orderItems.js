@@ -27,11 +27,11 @@ router.post("/add", (req, res) => {
 	const { items, lastId } = req.body
 
 		
-    const ADD_ORDER_ITEM = `INSERT INTO order_items (id_order, id_item, quantity, price, total) VALUES ?`
+    const ADD_ORDER_ITEM = `INSERT INTO order_items (id_order, id_item, item, quantity, price, total) VALUES ?`
     
     let values = [...items.map(i => {
         return [
-            lastId, i.id, i.quantity, i.price, i.quantity * i.price
+            lastId, i.id, i.name, i.quantity, i.price, i.quantity * i.price
         ]
     })]
 

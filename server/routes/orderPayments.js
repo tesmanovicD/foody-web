@@ -63,6 +63,24 @@ router.put("/edit", (req, res) => {
     })
 })
 
+router.put('/changeStatus', (req, res) => {
+    const { id, status } = req.body
+
+    if (!id || !status) {
+        res.status(500).send("You must provide all required params")
+    }
+
+    const UPDATE_ORDER_STATUS = `UPDATE order_payments SET status= "${status}" WHERE id= ${id}`
+
+    conn.query(UPDATE_ORDER_STATUS, (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            res.status(200).send("Status updated")
+        }
+    })
+})
+
 router.delete('/delete/:id', (req, res) => {
     const id = req.params.id ? req.params.id : null
 
