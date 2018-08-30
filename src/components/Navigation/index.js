@@ -19,7 +19,7 @@ const Navigation = () => (
             <Link to={i.url} key={key} className='nav-item'>{i.name}</Link>
             :
             <Aux key={key}>
-                <Link to={i.url} key={key} className='nav-item'>{i.name}</Link>
+            <Link to={i.url} key={key} className='nav-item'>{i.name}</Link>
                 <nav className='nav-dropdown'>
                 {i.dropDown.map((d, key) => (
                     <Link to={d.url} key={key} className='nav-dropdown-item'>{d.name}</Link>

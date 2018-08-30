@@ -19,6 +19,12 @@ class Employee extends Component {
 		.then(() => this.setState({ currentlyDisplayed: this.props.employee }))
 	}
 
+	componentDidUpdate(prevProps) {
+		if (this.props.employee !== prevProps.employee) {
+			this.setState({ searchTerm: '', currentlyDisplayed: this.props.employee })
+		}
+	}
+
 	deleteEmployee = (id) => {
 		this.props.dispatch(actions.employee.deleteEmployee(id))
 	}

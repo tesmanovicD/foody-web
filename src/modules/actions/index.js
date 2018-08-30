@@ -4,6 +4,7 @@ import employee from './employeeActions'
 import orders from './orderActions'
 import coupons from './couponActions'
 import foods from './foodSectionActions'
+import statistic from './statisticActions'
 
 export default {
     users,
@@ -11,5 +12,6 @@ export default {
     employee,
     orders,
     coupons,
-    foods
+    foods,
+    statistic
 }

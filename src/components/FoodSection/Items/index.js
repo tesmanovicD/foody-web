@@ -17,7 +17,13 @@ class Items extends Component {
 		this.props.dispatch(actions.foods.getAllItems())
 		.then(() => this.setState({ currentlyDisplayed: this.props.items }))
 		.catch(err => console.log(err))
-	}
+    }
+    
+    componentDidUpdate(prevProps) {
+        if (this.props.items !== prevProps.items) {
+            this.setState({ searchTerm: '', currentlyDisplayed: this.props.items })
+        }
+    }
 
 	deleteItem = (id) => {
 		this.props.dispatch(actions.foods.deleteItem(id))

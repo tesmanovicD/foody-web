@@ -53,7 +53,6 @@ function deleteItem(id) {
             api.delete(`/foodItems/delete/${id}`)
             .then((res) => {
                 dispatch({ type: 'DELETE_FOOD_ITEM', payload: {id} })
-                console.log(res)
                 resolve()
             })
             .catch(err => reject(err))

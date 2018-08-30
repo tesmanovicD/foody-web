@@ -47,6 +47,25 @@
   .main .main-content {
     flex: 3; }
 
+.image-logo {
+  display: flex;
+  justify-content: center; }
+
+.user-info {
+  display: flex;
+  justify-content: center; }
+  .user-info .btn-right {
+    width: 70%;
+    margin-left: 20px; }
+  .user-info .form-control {
+    width: 70%; }
+  .user-info .err-border {
+    border-color: #F00; }
+  .user-info .err-message {
+    color: #F00;
+    margin-left: 3px;
+    align-self: baseline; }
+
 .nav-item {
   display: block;
   border-bottom: 1px solid #eee;
@@ -101,6 +120,17 @@
   padding: 6px;
   font-size: 14px;
   border-top: 1px solid #dddddd; }
+
+.panel {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+  padding: 0px 15px;
+  background-color: #007BB7;
+  color: #FFF; }
+  .panel .statistic {
+    font-size: 50px;
+    margin-bottom: 0px; }
 
 body {
   margin: 0;

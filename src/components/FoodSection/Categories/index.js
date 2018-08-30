@@ -19,6 +19,12 @@ class Categories extends Component {
 		.catch(err => console.log(err))
 	}
 
+	componentDidUpdate(prevProps) {
+		if (this.props.categories !== prevProps.categories) {
+			this.setState({ searchTerm: '', currentlyDisplayed: this.props.categories })
+		}
+	}
+
 	deleteCategory = (id) => {
 		this.props.dispatch(actions.foods.deleteCategory(id))
 	}

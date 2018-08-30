@@ -20,12 +20,20 @@ import CouponAdd from '../Coupons/Coupon/CouponAdd';
 import CouponEdit from '../Coupons/Coupon/CouponEdit';
 import { FaUserCircle } from 'react-icons/fa';
 import Icons from '../../containers/Icons';
+import Dashboard from '../Dashboard';
 
 class Home extends Component {
 
   logoutUser = () => {
     this.props.dispatch(actions.users.logoutUser())
     this.props.history.push('/login')
+  }
+
+  toggleHiddenItem = (e, item) => {
+    e.preventDefault()
+    let target = document.getElementById(`${item}-nav`);
+    target[1].style.backgroundColor = "yellow";
+
   }
 
   render() {
@@ -42,11 +50,12 @@ class Home extends Component {
 
         <div className='main'>
           <div className='left-sidebar'>
-            <Navigation />
+            <Navigation toggleHiddenItem={this.toggleHiddenItem} />
           </div>
 
           <div className='main-content'>
             <Switch>
+              <Route exact path='/dashboard' component={Dashboard} />
               <Route exact path='/customers' component={Customers} />
               <Route path='/customers/edit/:id' component={CustomerEdit} />
               <Route exact path='/employee' component={Employee} />

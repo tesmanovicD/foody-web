@@ -7,6 +7,7 @@ import employee from '../reducers/employeeReducer'
 import orders from '../reducers/orderReducer'
 import coupons from '../reducers/couponReducer'
 import foods from '../reducers/foodSectionReducer'
+import statistic from '../reducers/statisticReducer'
 
 const rootReducer = combineReducers({
     user,
@@ -14,7 +15,8 @@ const rootReducer = combineReducers({
     employee,
     orders,
     coupons,
-    foods
+    foods,
+    statistic
 })
 
 const store = createStore(

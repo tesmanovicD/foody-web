@@ -15,6 +15,12 @@ class Customers extends Component {
 		.then(() => this.setState({ currentlyDisplayed: this.props.customers }))
 		.catch(err => console.log(err))
 	}
+	
+	componentDidUpdate(prevProps) {
+		if (this.props.customers !== prevProps.customers) {
+			this.setState({ searchTerm: '', currentlyDisplayed: this.props.customers })
+		}
+	}
 
 	deleteCustomer = (id) => {
 		this.props.dispatch(actions.customers.deleteCustomer(id))

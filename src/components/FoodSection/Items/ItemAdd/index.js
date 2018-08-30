@@ -13,7 +13,8 @@ class ItemAdd extends Component {
         description: '',
         category: 'choose',
         price: '',
-        quantity: ''
+        quantity: '',
+        image: ''
     }
   }
 
@@ -22,6 +23,15 @@ class ItemAdd extends Component {
   }
 
   handleChange = (e) => {
+    if(e.target.name === 'image') {
+      let image = e.target.files[0];
+      let form = new FormData();
+      form.append('image', image);
+      this.setState({
+         image: form,
+      });
+    }
+
     this.setState({
       item: { ...this.state.item, [e.target.name]: e.target.value }
     })
@@ -29,7 +39,8 @@ class ItemAdd extends Component {
 
   addItem = (e) => {
     e.preventDefault()
-    actions.foods.addItem(this.state.item)
+    const data = new FormData(e.target);
+    actions.foods.addItem(data)
     .then(() => this.props.history.push('/food/items'))
   }
 
@@ -48,6 +59,14 @@ class ItemAdd extends Component {
             <SelectOptions name='category' label="Category" defVal={item.category} opt={this.props.categories} action={this.handleChange.bind(this)} />
 						<TextInput name='price' label='Price' type='number' defVal={item.price} action={this.handleChange.bind(this)} />
 						<TextInput name='quantity' label='Quantity' type='number' defVal={item.quantity} action={this.handleChange.bind(this)} />
+            <input
+              type="file"
+              name="image"
+              onChange={this.handleInputChange}
+              style={{display: "none"}}
+              ref={(fileInput) => this.fileInput = fileInput}
+            />
+            <div><button type="button" className='btn' onClick={() => this.fileInput.click()}>Dodaj avatar</button></div>  
 
 						<div className='col-sm-9 offset-md-3'>
 							<button type='submit' className='btn btn-purple btn-loading'>Submit</button>

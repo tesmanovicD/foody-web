@@ -17,6 +17,12 @@ class Orders extends Component {
 		.catch(err => console.log(err))
 	}
 
+	componentDidUpdate(prevProps) {
+		if (this.props.orders !== prevProps.orders) {
+			this.setState({ searchTerm: '', currentlyDisplayed: this.props.orders })
+		}
+	}
+
 	deleteEmployee = (id) => {
 		this.props.dispatch(actions.orders.deleteOrder(id))
 	}

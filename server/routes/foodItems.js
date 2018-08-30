@@ -4,7 +4,7 @@ const conn = require('../config')
 const multer = require('multer')
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, "./uploads/userAvatars/");
+        cb(null, "./uploads/food/");
     },
     filename: function(req, file, cb) {
         cb(null, Math.random().toFixed(2) + "_"+file.originalname);
@@ -64,7 +64,7 @@ router.post("/add", upload.single('image'), (req, res) => {
     }
 
     const ADD_FOOD_ITEM = `INSERT INTO food_items (name, description, category, image, price, quantity) 
-                          VALUES ('${name}', '${description}', '${category}', ${image}, ${price}, ${quantity})`
+                          VALUES ('${name}', '${description}', '${category}', '${image}', ${price}, ${quantity})`
 
     conn.query(ADD_FOOD_ITEM, (err, result) => {
         if (err) {
