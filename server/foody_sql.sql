@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 27, 2018 at 11:47 AM
+-- Generation Time: Aug 30, 2018 at 09:28 PM
 -- Server version: 5.7.21
 -- PHP Version: 5.6.35
 
@@ -65,6 +65,7 @@ CREATE TABLE IF NOT EXISTS `customers` (
   `phone` varchar(11) COLLATE utf8_unicode_ci DEFAULT NULL,
   `fname` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   `lname` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
+  `date_registered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -72,9 +73,9 @@ CREATE TABLE IF NOT EXISTS `customers` (
 -- Dumping data for table `customers`
 --
 
-INSERT INTO `customers` (`id`, `email`, `password`, `phone`, `fname`, `lname`) VALUES
-(3, 'edincedin@gmail.com', '123', '', 'Daniel', 'Tesmanovic'),
-(4, 'dani@gmail.com', '111', '', 'Marko', 'Markovic');
+INSERT INTO `customers` (`id`, `email`, `password`, `phone`, `fname`, `lname`, `date_registered`) VALUES
+(3, 'edincedin@gmail.com', '123', '', 'Daniel', 'Tesmanovic', '2018-08-30 21:13:10'),
+(4, 'dani@gmail.com', '111', '', 'Marko', 'Markovic', '2018-08-30 21:13:10');
 
 -- --------------------------------------------------------
 
@@ -90,7 +91,7 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `password` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=10 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `employee`
@@ -138,7 +139,7 @@ CREATE TABLE IF NOT EXISTS `food_items` (
   `price` smallint(6) NOT NULL,
   `quantity` smallint(6) NOT NULL DEFAULT '0',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=8 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `food_items`
@@ -146,7 +147,8 @@ CREATE TABLE IF NOT EXISTS `food_items` (
 
 INSERT INTO `food_items` (`id`, `name`, `description`, `category`, `image`, `price`, `quantity`) VALUES
 (1, 'Margarita', 'opis', 13, '', 22, 3),
-(2, 'Testenina', 'ovo je opis', 13, '', 48, 2);
+(2, 'Testenina', 'ovo je opis', 13, '', 48, 2),
+(7, 'palacinka', 'slatka palacinka', 18, '0.50_najukusnije_palacinke.jpg', 24, 34);
 
 -- --------------------------------------------------------
 
