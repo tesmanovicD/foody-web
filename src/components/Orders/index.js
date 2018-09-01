@@ -15,6 +15,8 @@ class Orders extends Component {
 		this.props.dispatch(actions.orders.getAllOrders())
 		.then(() => this.setState({ currentlyDisplayed: this.props.orders }))
 		.catch(err => console.log(err))
+
+		console.log(this.props.orders)
 	}
 
 	componentDidUpdate(prevProps) {
@@ -27,8 +29,11 @@ class Orders extends Component {
 		this.props.dispatch(actions.orders.deleteOrder(id))
 	}
 
-	editOrder = (id) => {
-		this.props.history.push(`/orders/edit/${id}`)
+	reviewOrder = (id, status) => {
+		this.props.history.push({
+			pathname: `/orders/review/${id}`,
+			state: { status }
+		})
 	}
 
 	onInputChange = (e) => {
@@ -42,7 +47,7 @@ class Orders extends Component {
 	}
 
   render() {
-	const tableRows = ['Food Name', 'Customer Name', 'Quantity', 'Price', 'Order Date', 'Pickup date(approx)', 'Action']
+	const tableRows = ['Customer Name', 'Price', 'Order Date', 'Pickup date(approx)', 'Status', 'Action']
 
     return (
 			<div className="card">
@@ -64,7 +69,7 @@ class Orders extends Component {
 					</thead>
 					<tbody>
 						{this.state.currentlyDisplayed.length ?
-							this.state.currentlyDisplayed.map(o => <Order key={o.id} order={o} deleteOrder={this.deleteOrder} editOrder={this.editOrder} />)
+							this.state.currentlyDisplayed.map(o => <Order key={o.id} order={o} deleteOrder={this.deleteOrder} reviewOrder={this.reviewOrder} />)
 							:
 							<tr className='table-props'>
 								<td colSpan={tableRows.length} className='text-center'>No data available in table</td>

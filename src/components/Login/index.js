@@ -40,7 +40,7 @@ class Login extends Component {
     return (
     	<div>
 			<section className="image-logo">
-				<img src="/images/foody_logo.png" className="img-fluid" alt="Foody Logo" />
+				<img src="/images/logo_foody.png" className="img-fluid" alt="Foody Logo" />
 			</section>
 
 			<section className="user-info">

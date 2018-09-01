@@ -21,6 +21,7 @@ import CouponEdit from '../Coupons/Coupon/CouponEdit';
 import { FaUserCircle } from 'react-icons/fa';
 import Icons from '../../containers/Icons';
 import Dashboard from '../Dashboard';
+import OrderReview from '../Orders/OrderReview';
 
 class Home extends Component {
 
@@ -68,6 +69,7 @@ class Home extends Component {
               <Route path='/food/items/add' component={ItemAdd} />
               <Route path='/food/items/edit/:id' component={ItemEdit} />
               <Route exact path='/orders' component={Orders} />
+              <Route path='/orders/review/:id' component={OrderReview} />
               <Route exact path='/coupons' component={Coupons} />
               <Route path='/coupons/add' component={CouponAdd} />
               <Route path='/coupons/edit/:id' component={CouponEdit} />

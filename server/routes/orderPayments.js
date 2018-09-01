@@ -5,14 +5,28 @@ const conn = require('../config')
 
 router.get(["/", "/:id"], (req, res) => {
     const id = req.params.id ? req.params.id : null
+    // const SELECT_ORDER_PAYMENTS = id ?
+    //   `SELECT op.id, date, op.price, order_no, oi.item, oi.quantity,
+    //   UNIX_TIMESTAMP(date) as date, UNIX_TIMESTAMP(pickup_date) as pickup_date, status, c.email FROM order_payments op
+    //   INNER JOIN order_items oi ON op.id = oi.id_order
+    //   LEFT OUTER JOIN customers c ON op.id_customer = c.id WHERE op.id = ${id}`
+    //   :
+    //   `SELECT op.id, date, op.price, order_no, oi.item, oi.quantity,
+    //   UNIX_TIMESTAMP(date) as date, UNIX_TIMESTAMP(pickup_date) as pickup_date, status, c.email FROM order_payments op
+    //   INNER JOIN order_items oi ON op.id = oi.id_order
+    //   LEFT OUTER JOIN customers c ON op.id_customer = c.id`
     const SELECT_ORDER_PAYMENTS = id ?
-      `SELECT * FROM order_payments WHERE id = ${id}`
-      :
-      `SELECT * FROM order_payments`
+    `SELECT op.id, date, op.price, order_no, c.fname, c.lname,
+    UNIX_TIMESTAMP(date) as date, UNIX_TIMESTAMP(pickup_date) as pickup_date, status FROM order_payments op
+    LEFT OUTER JOIN customers c ON op.id_customer = c.id WHERE op.id = ${id}`
+    :
+    `SELECT op.id, date, op.price, order_no, c.fname, c.lname,
+    UNIX_TIMESTAMP(date) as date, UNIX_TIMESTAMP(pickup_date) as pickup_date, status FROM order_payments op
+    LEFT OUTER JOIN customers c ON op.id_customer = c.id`
     
     conn.query(SELECT_ORDER_PAYMENTS, (err, result) => {
       if (err) {
-        console.log("err")
+        console.log(err)
       } else {
         if (result.length == 0) {
           return res.status(500).send("No order payments")
