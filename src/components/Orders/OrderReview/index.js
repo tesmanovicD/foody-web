@@ -12,15 +12,16 @@ class OrderReview extends Component {
     isDisabled: true
   }
 
-  getOrder = (id, status) => {
+  getOrder = (id) => {
     this.props.dispatch(actions.orders.getOrder(id))
     .then(order => {
-      const isDisabled = status === 'completed' ? true : false
+      const isDisabled = order.status === 'Completed' || order.status === 'Canceled' || order.status === 'Ready' ? true : false
       this.setState({ 
-        order: {...order, 
-                date: moment.unix(order.date).format('YYYY-MM-DD'), 
-                end_date: moment.unix(order.end_date).format('YYYY-MM-DD')
-               },
+        order: {
+          ...order, 
+          date: moment.unix(order.date).format('YYYY-MM-DD'), 
+          end_date: moment.unix(order.end_date).format('YYYY-MM-DD')
+        },
         isDisabled 
       })
     })
@@ -30,9 +31,30 @@ class OrderReview extends Component {
     })
   }
 
+  acceptOrder = (e) => {
+    e.preventDefault();
+    const { order } = this.state
+    //Get current date and add 20min on it
+    const pickupDate = moment().add(20,'m').format('YYYY-MM-DD hh:mm:ss')
+
+    this.props.dispatch(actions.orders.acceptOrder(order.id, pickupDate, order.id_customer, order.order_no))
+    .then(() => {
+      this.getOrder(this.props.match.params.id)
+    })
+    .catch(err => console.log(err))
+  }
+
+  handleChange = (e) => {
+    this.setState({
+      order: {
+        ...this.state.order,
+        end_date: e.target.value
+      }
+    })
+  }
+
   componentDidMount() {
-    const status = this.props.location.state ? this.props.location.state.status : 'changeMe'
-    this.getOrder(this.props.match.params.id, status)
+    this.getOrder(this.props.match.params.id)
   }
 
   render() {
@@ -46,17 +68,19 @@ class OrderReview extends Component {
           <h6 className="card-title">Review Order</h6>
         </div>
         <div className="card-body">
-        <form onSubmit={this.submitEditedCustomer}>
-          <TextInput name='fname' label='First Name' defVal={order.fname} disabled />
-          <TextInput name='lname' label='Last Name' defVal={order.lname} disabled />
-          <TextInput name='price' type='number' label='Price' defVal={order.price} disabled />
-          <TextInput name='orderDate' type='date' label='Order Date' defVal={order.date} disabled  />
-          <TextInput name='pickupDate' type='date' label='Pickup Date' defVal={order.pickup_date} disabled={isDisabled} />
-          <TextInput name='status' label='Status' defVal={order.status} disabled />
-          <div className='col-sm-9 offset-md-3'>
-            <button type='submit' className='btn btn-purple btn-loading'>Submit</button>
-          </div>
-        </form>
+          <h4 className="offset-4 order-heading">Order #{order.order_no} - {order.status}</h4>
+
+          <form onSubmit={this.acceptOrder}>
+            <TextInput name='fname' label='First Name' defVal={order.fname} disabled />
+            <TextInput name='lname' label='Last Name' defVal={order.lname} disabled />
+            <TextInput name='price' type='number' label='Price' defVal={order.price} disabled />
+            <TextInput name='orderDate' type='date' label='Order Date' defVal={order.date} disabled  />
+            {!isDisabled && 
+            <div className='col-sm-9 offset-md-3'>
+              <button type='submit' className='btn btn-purple btn-loading'>Submit</button>
+            </div>
+            }
+          </form>
         </div>
       </div>
       :

@@ -51,7 +51,10 @@ class Customers extends Component {
 			</div>
 			<div className="card-body">
 				<div className='card-control'>
-					<span>Show <select><option>25</option></select> entries</span>
+					<span>Show <select>
+						<option>25</option>
+						<option>50</option>
+					</select> entries</span>
 					<span>Search: <input type='text' value={this.state.searchTerm} onChange={this.onInputChange} /> </span>
 				</div>
 

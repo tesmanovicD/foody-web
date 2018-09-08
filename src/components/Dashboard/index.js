@@ -26,7 +26,7 @@ class Dashboard extends Component {
 					<h6 className="card-title">Dashboard</h6>
 				</div>
 				<div className="card-body row">
-					<StatisticItem value={this.props.todayStatistic.order} name="Orders Today" />
+					<StatisticItem value={this.props.todayStatistic.orders} name="Orders Today" />
 					<StatisticItem value={this.props.todayStatistic.sales} name="Sales Today" currency />
 					<StatisticItem value={this.props.todayStatistic.customers} name="Customers Today" />
 					

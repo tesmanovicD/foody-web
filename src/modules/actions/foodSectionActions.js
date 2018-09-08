@@ -40,7 +40,6 @@ function editItem(id, item) {
     return new Promise((resolve, reject) => {
         api.put('/foodItems/edit', {id, ...item})
         .then(() => {
-            console.log("test");
             resolve()
         })
         .catch(err => reject(err))

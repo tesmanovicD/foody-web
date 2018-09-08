@@ -1,6 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
+import { FaUserCircle } from 'react-icons/fa';
+
 import actions from '../../modules/actions'
 import Navigation from '../Navigation';
 import Customers from '../Customers'
@@ -18,7 +20,6 @@ import ItemAdd from '../FoodSection/Items/ItemAdd';
 import ItemEdit from '../FoodSection/Items/ItemEdit';
 import CouponAdd from '../Coupons/Coupon/CouponAdd';
 import CouponEdit from '../Coupons/Coupon/CouponEdit';
-import { FaUserCircle } from 'react-icons/fa';
 import Icons from '../../containers/Icons';
 import Dashboard from '../Dashboard';
 import OrderReview from '../Orders/OrderReview';
@@ -34,7 +35,22 @@ class Home extends Component {
     e.preventDefault()
     let target = document.getElementById(`${item}-nav`);
     target[1].style.backgroundColor = "yellow";
+  }
 
+  initializeOneSignal = () => {
+    var OneSignal = window.OneSignal || [];
+    OneSignal.push(function() {
+      OneSignal.init({
+        appId: "74723254-f9b6-4f24-bde3-5835a592f71e",
+      });
+      OneSignal.sendTags({
+        rule: 'Chef',
+      });
+    });
+  }
+
+  componentWillMount() {
+    this.initializeOneSignal()
   }
 
   render() {
@@ -56,7 +72,7 @@ class Home extends Component {
 
           <div className='main-content'>
             <Switch>
-              <Route exact path='/dashboard' component={Dashboard} />
+              <Route exact path='/' component={Dashboard} />
               <Route exact path='/customers' component={Customers} />
               <Route path='/customers/edit/:id' component={CustomerEdit} />
               <Route exact path='/employee' component={Employee} />

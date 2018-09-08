@@ -3,11 +3,11 @@ import { Link } from 'react-router-dom'
 import Aux from '../../hoc/Auxillary'
 
 const menuItems = [
-    {url:'/dashboard', name:'Dashboard'},
+    {url:'/', name:'Dashboard'},
     {url:'/employee', name:'Employee'},
     {url:'/customers', name:'Customers'},
     {url:'/orders', name:'Orders'},
-    {url:'/food', name:'Food section', dropDown: [{url: '/food/categories', name: 'Dish Categories'}, {url: '/food/items', name: 'Dish Items'},]},
+    {url:'#', name:'Food section', dropDown: [{url: '/food/categories', name: 'Dish Categories'}, {url: '/food/items', name: 'Dish Items'},]},
     {url:'/coupons', name:'Coupons'},
     {url:'/settings', name:'Settings'}
 ]

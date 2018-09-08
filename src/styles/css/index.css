@@ -41,6 +41,7 @@
   flex: 1;
   padding: 20px; }
   .main .left-sidebar {
+    max-height: 295px;
     flex: 0.5;
     background-color: #735397;
     margin-right: 40px; }
@@ -131,6 +132,9 @@
   .panel .statistic {
     font-size: 50px;
     margin-bottom: 0px; }
+
+.order-heading {
+  margin-bottom: 30px; }
 
 body {
   margin: 0;

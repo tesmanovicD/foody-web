@@ -8,18 +8,13 @@ import { FaTrashAlt, FaExclamationCircle, FaEye } from 'react-icons/fa'
 
 const generateOrderStatus = (status, id, reviewOrder) => {
     if (status === 'Pending') {
-        return <td onClick={() => reviewOrder(id, 'pending')}>
+        return <td onClick={() => reviewOrder(id)}>
                     <span style={{marginRight: '5px'}}>{status}</span>
                     <Icons title='Review pending order' size={14}><FaExclamationCircle/></Icons>
                 </td>
-    } else if (status === 'Canceled') {
-        return <td onClick={() => reviewOrder(id, 'completed')}>
-                    <span style={{marginRight: '5px'}}>{status}</span>
-                    <Icons title='Review order' size={14}><FaEye/></Icons>
-                </td>
-    }
+    } 
     
-    return <td onClick={() => reviewOrder(id, 'completed')}>
+    return <td onClick={() => reviewOrder(id)}>
                 <span style={{marginRight: '5px'}}>{status}</span>
                 <Icons title='Review order' size={14}><FaEye/></Icons>
             </td>
@@ -33,15 +28,15 @@ const Order = (props) => (
             <td> - / -</td>
             }
             <td>$ {props.order.price.toFixed(2)}</td>
-            <td>{moment.unix(props.order.date).format('DD/MM/YYYY HH:MM')}</td>
-            {props.order.pickup_date !== 0 ?
-            <td>{moment.unix(props.order.pickup_date).format('DD/MM/YYYY HH:MM')}</td>
+            <td>{moment.unix(props.order.date).format('DD/MM/YYYY HH:mm')}</td>
+            {props.order.pickup_date !== 0 && props.order.pickup_date != null ?
+            <td>{moment.unix(props.order.pickup_date).format('DD/MM/YYYY HH:mm')}</td>
             :
             <td>Not generated</td>
             }
             {generateOrderStatus(props.order.status, props.order.id, props.reviewOrder)}
             <td>
-                <span onClick={() => props.deleteEmployee(props.employee.id)}>
+                <span onClick={() => props.deleteOrder(props.order.id)}>
                     <Icons title="Delete">
                         <FaTrashAlt />
                     </Icons>

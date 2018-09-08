@@ -83,7 +83,7 @@ router.put("/edit", (req, res) => {
     }
 
     const UPDATE_FOOD_ITEM = `UPDATE food_items SET 
-                            name= "${name}", description= "${description}", price= "${price}", quantity= "${fname}", category= "${category}"
+                            name= "${name}", description= "${description}", price= "${price}", quantity= "${quantity}", category= "${category}"
                             WHERE id= ${id}`
 
     conn.query(UPDATE_FOOD_ITEM, (err, result) => {

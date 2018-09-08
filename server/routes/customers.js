@@ -1,7 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const conn = require('../config')
-
+const helper = require('../helper')
 
 router.get(["/", "/:id"], (req, res) => {
     const id = req.params.id ? req.params.id : null
@@ -30,8 +30,9 @@ router.post("/add", (req, res) => {
         return res.status(500).send("You must fill required fields")
     }
 
+    const hashedPassword = helper.saltHashPassword(password)
     const ADD_CUSTOMER = `INSERT INTO customers (email, password, phone, fname, lname) 
-                          VALUES ('${email}', '${password}', '${phone}', '${fname}', ${lname})`
+                          VALUES ('${email}', '${hashedPassword}', '${phone}', '${fname}', '${lname}')`
 
     conn.query(ADD_CUSTOMER, (err, result) => {
         if (err) {
@@ -81,22 +82,23 @@ router.delete('/delete/:id', (req, res) => {
 })
 
 router.post('/authenticate', (req, res) => {
-    const { username, password } = req.body
+    const { email, password } = req.body
     console.log(req.body)
 
-    if ( !username || !password) {
-        return res.status(500).send("You must enter username and password")
+    if ( !email || !password) {
+        return res.status(500).send("You must enter email and password")
     }
 
-    const AUTHENTICATE_USER = `SELECT id, fname, lname FROM customers WHERE email = "${email}" AND password = "${password}" `
+    const hashedPassword = helper.saltHashPassword(password)
+    const AUTHENTICATE_USER = `SELECT id, fname, lname FROM customers WHERE email = "${email}" AND password = "${hashedPassword}" `
     conn.query(AUTHENTICATE_USER, (err, result) => {
         if (err) {
             console.log(err)
         } else {
             if (result.length == 0) {
-                return res.status(500).send("Wrong username or password")
+                return res.status(500).send("Wrong email or password")
             } else {
-                return res.status(200).send(result)
+                return res.status(200).send(result[0])
             }
         }
     })

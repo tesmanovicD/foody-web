@@ -5,22 +5,12 @@ const conn = require('../config')
 
 router.get(["/", "/:id"], (req, res) => {
     const id = req.params.id ? req.params.id : null
-    // const SELECT_ORDER_PAYMENTS = id ?
-    //   `SELECT op.id, date, op.price, order_no, oi.item, oi.quantity,
-    //   UNIX_TIMESTAMP(date) as date, UNIX_TIMESTAMP(pickup_date) as pickup_date, status, c.email FROM order_payments op
-    //   INNER JOIN order_items oi ON op.id = oi.id_order
-    //   LEFT OUTER JOIN customers c ON op.id_customer = c.id WHERE op.id = ${id}`
-    //   :
-    //   `SELECT op.id, date, op.price, order_no, oi.item, oi.quantity,
-    //   UNIX_TIMESTAMP(date) as date, UNIX_TIMESTAMP(pickup_date) as pickup_date, status, c.email FROM order_payments op
-    //   INNER JOIN order_items oi ON op.id = oi.id_order
-    //   LEFT OUTER JOIN customers c ON op.id_customer = c.id`
     const SELECT_ORDER_PAYMENTS = id ?
-    `SELECT op.id, date, op.price, order_no, c.fname, c.lname,
+    `SELECT op.id, op.id_customer, date, op.price, order_no, c.fname, c.lname,
     UNIX_TIMESTAMP(date) as date, UNIX_TIMESTAMP(pickup_date) as pickup_date, status FROM order_payments op
     LEFT OUTER JOIN customers c ON op.id_customer = c.id WHERE op.id = ${id}`
     :
-    `SELECT op.id, date, op.price, order_no, c.fname, c.lname,
+    `SELECT op.id, op.id_customer, date, op.price, order_no, c.fname, c.lname,
     UNIX_TIMESTAMP(date) as date, UNIX_TIMESTAMP(pickup_date) as pickup_date, status FROM order_payments op
     LEFT OUTER JOIN customers c ON op.id_customer = c.id`
     
@@ -35,6 +25,28 @@ router.get(["/", "/:id"], (req, res) => {
         }
       }
     })
+})
+
+router.get("/getUserOrders/:id", (req, res) => {
+    const id = req.params.id;
+
+    if (!id) {
+        return res.status(500).send("You must provide user id")
+    }
+    const SELECT_USER_ORDERS = `SELECT * FROM order_payments WHERE id_customer= ${id}`
+
+    conn.query(SELECT_USER_ORDERS, (err, result) => {
+        if (err) {
+            console.log(err)
+        } else {
+            if (result.length == 0) {
+                return res.status(500).send("User does not have recent orders")
+            } else {
+                return res.status(200).json(result)
+            }
+        }
+    })
+
 })
 
 router.post("/add", (req, res) => {
@@ -79,12 +91,16 @@ router.put("/edit", (req, res) => {
 
 router.put('/changeStatus', (req, res) => {
     const { id, status } = req.body
+    const pickupDate = req.body.pickupDate 
 
     if (!id || !status) {
         res.status(500).send("You must provide all required params")
     }
 
-    const UPDATE_ORDER_STATUS = `UPDATE order_payments SET status= "${status}" WHERE id= ${id}`
+    const UPDATE_ORDER_STATUS = pickupDate ?
+        `UPDATE order_payments SET status= "${status}", pickup_date= '${pickupDate}' WHERE id= ${id}`
+        :
+        `UPDATE order_payments SET status= "${status}" WHERE id= ${id}`
 
     conn.query(UPDATE_ORDER_STATUS, (err, result) => {
         if (err) {
