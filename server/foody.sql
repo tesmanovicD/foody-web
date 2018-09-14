@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Aug 30, 2018 at 09:28 PM
+-- Generation Time: Sep 14, 2018 at 10:05 PM
 -- Server version: 5.7.21
 -- PHP Version: 5.6.35
 
@@ -21,8 +21,6 @@ SET time_zone = "+00:00";
 --
 -- Database: `foody`
 --
-CREATE DATABASE IF NOT EXISTS `foody` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
-USE `foody`;
 
 -- --------------------------------------------------------
 
@@ -34,13 +32,13 @@ DROP TABLE IF EXISTS `coupons`;
 CREATE TABLE IF NOT EXISTS `coupons` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `code` varchar(20) COLLATE utf8_unicode_ci NOT NULL,
-  `type` varchar(11) COLLATE utf8_unicode_ci NOT NULL,
+  `type` enum('fixed','percentage') COLLATE utf8_unicode_ci NOT NULL,
   `discount` smallint(6) NOT NULL,
   `usage_limit` tinyint(4) NOT NULL,
   `used_coupons` tinyint(4) NOT NULL DEFAULT '0',
   `start_date` timestamp NOT NULL,
   `end_date` timestamp NOT NULL,
-  `status` varchar(9) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'active',
+  `status` enum('active','inactive') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'active',
   PRIMARY KEY (`id`)
 ) ENGINE=InnoDB AUTO_INCREMENT=3 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
@@ -49,7 +47,7 @@ CREATE TABLE IF NOT EXISTS `coupons` (
 --
 
 INSERT INTO `coupons` (`id`, `code`, `type`, `discount`, `usage_limit`, `used_coupons`, `start_date`, `end_date`, `status`) VALUES
-(2, 'K67TN397', 'fixed', 22, 2, 0, '2018-08-14 22:00:00', '2018-09-14 22:00:00', 'inactive');
+(2, 'K67TN397', 'fixed', 22, 2, 2, '2018-08-14 22:00:00', '2018-09-14 22:00:00', 'active');
 
 -- --------------------------------------------------------
 
@@ -61,21 +59,22 @@ DROP TABLE IF EXISTS `customers`;
 CREATE TABLE IF NOT EXISTS `customers` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `email` varchar(60) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(129) COLLATE utf8_unicode_ci NOT NULL,
   `phone` varchar(11) COLLATE utf8_unicode_ci DEFAULT NULL,
   `fname` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   `lname` varchar(40) COLLATE utf8_unicode_ci NOT NULL,
   `date_registered` timestamp NOT NULL DEFAULT CURRENT_TIMESTAMP,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=12 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `customers`
 --
 
 INSERT INTO `customers` (`id`, `email`, `password`, `phone`, `fname`, `lname`, `date_registered`) VALUES
-(3, 'edincedin@gmail.com', '123', '', 'Daniel', 'Tesmanovic', '2018-08-30 21:13:10'),
-(4, 'dani@gmail.com', '111', '', 'Marko', 'Markovic', '2018-08-30 21:13:10');
+(9, 'zpopic@gmail.com', 'a078b1e15dbf17feb3eeebd900984c55c1551c2e9f23965c3d6613fd018c5c5b58929332f7c8c0957ef030253b243aa9ac1279480d99eada2883e5b3ad648a77', '06593242', 'Zoran', 'Popic', '2018-09-14 21:40:58'),
+(10, 'sradovanovic@gmail.com', 'a078b1e15dbf17feb3eeebd900984c55c1551c2e9f23965c3d6613fd018c5c5b58929332f7c8c0957ef030253b243aa9ac1279480d99eada2883e5b3ad648a77', '', 'Stevica', 'Radovanovic', '2018-09-14 21:41:11'),
+(11, 'dtesmanovic@gmail.com', 'a950175e333938c82f78ce3fcd7ea845b0037eb61890f159cf9aeda4c49808cbcced51413a55c031231b0ed6acf39104a73eea169bcc859917bd660618e6e646', '', 'Daniel', 'Tesmanovic', '2018-09-14 21:41:35');
 
 -- --------------------------------------------------------
 
@@ -89,17 +88,17 @@ CREATE TABLE IF NOT EXISTS `employee` (
   `fname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `lname` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `username` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
-  `password` varchar(30) COLLATE utf8_unicode_ci NOT NULL,
+  `password` varchar(129) COLLATE utf8_unicode_ci NOT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=MyISAM AUTO_INCREMENT=14 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=MyISAM AUTO_INCREMENT=17 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `employee`
 --
 
 INSERT INTO `employee` (`id`, `fname`, `lname`, `username`, `password`) VALUES
-(8, 'Daniel', 'Tesmanovic', 'danites', '123'),
-(9, 'Aleksandar', 'Mamuzic', 'mamuza', '111');
+(16, 'Admin', 'Korisnik', 'admin', 'a950175e333938c82f78ce3fcd7ea845b0037eb61890f159cf9aeda4c49808cbcced51413a55c031231b0ed6acf39104a73eea169bcc859917bd660618e6e646'),
+(15, 'Daniel', 'Tesmanovic', 'dtesmanovic', 'f2fabb723907fae9b89013eb30b0080807b48b3e9ba050e114bb9cd3721b10af77451e193bd3186bdeae4b3f783180a07a636a94044a32d6746744aa40127c54');
 
 -- --------------------------------------------------------
 
@@ -112,16 +111,18 @@ CREATE TABLE IF NOT EXISTS `food_category` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `name` varchar(50) COLLATE utf8_unicode_ci NOT NULL,
   `description` varchar(100) COLLATE utf8_unicode_ci DEFAULT NULL,
+  `image` varchar(30) COLLATE utf8_unicode_ci NOT NULL DEFAULT 'no_image.png',
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=19 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
+) ENGINE=InnoDB AUTO_INCREMENT=20 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Dumping data for table `food_category`
 --
 
-INSERT INTO `food_category` (`id`, `name`, `description`) VALUES
-(13, 'povrce', 'eheh'),
-(18, 'slatko', 'hahaha');
+INSERT INTO `food_category` (`id`, `name`, `description`, `image`) VALUES
+(13, 'povrce', 'opis neki', 'no_image.png'),
+(18, 'slatko', 'hahaha', 'no_image.png'),
+(19, 'test', 'teqtqew', '0.60_img_3820.jpg');
 
 -- --------------------------------------------------------
 
@@ -146,9 +147,9 @@ CREATE TABLE IF NOT EXISTS `food_items` (
 --
 
 INSERT INTO `food_items` (`id`, `name`, `description`, `category`, `image`, `price`, `quantity`) VALUES
-(1, 'Margarita', 'opis', 13, '', 22, 3),
-(2, 'Testenina', 'ovo je opis', 13, '', 48, 2),
-(7, 'palacinka', 'slatka palacinka', 18, '0.50_najukusnije_palacinke.jpg', 24, 34);
+(1, 'Margarita', 'opis', 13, 'no_image.png', 22, 0),
+(2, 'Testenina', 'ovo je opis', 13, 'no_image.png', 48, 3),
+(7, 'palacinka', 'slatka palacinka', 18, '0.50_najukusnije_palacinke.jpg', 28, 0);
 
 -- --------------------------------------------------------
 
@@ -168,17 +169,7 @@ CREATE TABLE IF NOT EXISTS `order_items` (
   PRIMARY KEY (`id`),
   KEY `id_order` (`id_order`),
   KEY `id_item` (`id_item`)
-) ENGINE=InnoDB AUTO_INCREMENT=5 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `order_items`
---
-
-INSERT INTO `order_items` (`id`, `id_order`, `id_item`, `item`, `quantity`, `price`, `total`) VALUES
-(1, 48, 1, 'Margarita', 1, 22, 22),
-(2, 48, 2, 'Testenina', 1, 48, 48),
-(3, 49, 2, 'Testenina', 1, 48, 48),
-(4, 50, 1, 'Margarita', 1, 22, 22);
+) ENGINE=InnoDB DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Triggers `order_items`
@@ -205,17 +196,9 @@ CREATE TABLE IF NOT EXISTS `order_payments` (
   `price` smallint(15) NOT NULL DEFAULT '0',
   `order_no` bigint(15) NOT NULL,
   `status` enum('Canceled','Pending','Ready','Completed') COLLATE utf8_unicode_ci NOT NULL DEFAULT 'Pending',
+  `pickup_date` timestamp NULL DEFAULT NULL,
   PRIMARY KEY (`id`)
-) ENGINE=InnoDB AUTO_INCREMENT=51 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
-
---
--- Dumping data for table `order_payments`
---
-
-INSERT INTO `order_payments` (`id`, `id_customer`, `date`, `price`, `order_no`, `status`) VALUES
-(48, 8, '2018-08-27 08:23:29', 70, 58208651, 'Canceled'),
-(49, 8, '2018-08-27 09:08:09', 48, 60888626, 'Completed'),
-(50, 8, '2018-08-27 09:19:44', 22, 61583967, 'Pending');
+) ENGINE=InnoDB AUTO_INCREMENT=71 DEFAULT CHARSET=utf8 COLLATE=utf8_unicode_ci;
 
 --
 -- Constraints for dumped tables
