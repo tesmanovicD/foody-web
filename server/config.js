@@ -1,9 +1,9 @@
 const mysql = require('mysql')
 const conn = mysql.createConnection({
-    host: 'https://www.db4free.net',
-    user: 'foodyusername',
-    password: 'foodypass',
-    database: 'foodydatabase'
+    host: 'localhost',
+    user: 'root',
+    password: '',
+    database: 'foody'
 })
 
 conn.connect((err => console.log(err)))

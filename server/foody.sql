@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1:3306
--- Generation Time: Sep 14, 2018 at 10:05 PM
+-- Generation Time: Sep 14, 2018 at 10:30 PM
 -- Server version: 5.7.21
 -- PHP Version: 5.6.35
 
@@ -21,6 +21,8 @@ SET time_zone = "+00:00";
 --
 -- Database: `foody`
 --
+CREATE DATABASE IF NOT EXISTS `foody` DEFAULT CHARACTER SET utf8 COLLATE utf8_unicode_ci;
+USE `foody`;
 
 -- --------------------------------------------------------
 
