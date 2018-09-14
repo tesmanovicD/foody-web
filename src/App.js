@@ -1,6 +1,6 @@
-import React, { Component } from 'react';
+import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import './App.css';
+import './App.css'
 import { BrowserRouter as Router } from 'react-router-dom'
 import routes from './routes'
 
@@ -20,7 +20,7 @@ class App extends Component {
         <Router>
           { routes }
         </Router>
-    );
+    )
   }
 }
 
@@ -30,4 +30,4 @@ const mapStateToProps = (state) => {
   }
 }
 
-export default connect(mapStateToProps)(App);
+export default connect(mapStateToProps)(App)

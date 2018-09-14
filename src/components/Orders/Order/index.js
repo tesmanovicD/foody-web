@@ -1,9 +1,8 @@
 import React from 'react'
 import moment from 'moment'
-
-import Icons from '../../../containers/Icons'
 import { FaTrashAlt, FaExclamationCircle, FaEye } from 'react-icons/fa'
 
+import Icons from '../../../containers/Icons'
 
 
 const generateOrderStatus = (status, id, reviewOrder) => {

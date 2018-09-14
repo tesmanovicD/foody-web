@@ -12,7 +12,7 @@ router.get(["/", "/:id"], (req, res) => {
     
     conn.query(SELECT_ORDER_ITEMS, (err, result) => {
       if (err) {
-        console.log("err")
+        return res.status(500).send("Something went wrong, please try again later")
       } else {
         if (result.length == 0) {
           return res.status(500).send("No orders")
@@ -35,14 +35,13 @@ router.post("/add", (req, res) => {
         ]
     })]
 
-    conn.query(ADD_ORDER_ITEM, [values], (err, result) => {
+    conn.query(ADD_ORDER_ITEM, [values], (err) => {
         if (err) {
-            console.log(err)
-            return res.status(500).send("error")
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
             return res.status(200).send(`Items added succesfully`)
         }
-    });
+    })
 
 })
 
@@ -58,11 +57,11 @@ router.put("/edit", (req, res) => {
                             total= "${total}"
                             WHERE id= ${id}`
 
-    conn.query(UPDATE_ORDER_ITEM, (err, result) => {
+    conn.query(UPDATE_ORDER_ITEM, (err) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
-            res.status(200).send(`Order ID ${id} edited succesfully`)
+            return res.status(200).send(`Order ID ${id} edited succesfully`)
         }
     })
 })
@@ -73,15 +72,15 @@ router.delete('/delete/:id', (req, res) => {
     if (id) {
         const DELETE_ORDER_ITEM = `DELETE FROM order_items WHERE id = ${id}`
 
-        conn.query(DELETE_ORDER_ITEM, (err, result) => {
+        conn.query(DELETE_ORDER_ITEM, (err) => {
             if (err) {
-                console.log(err)
+                return res.status(500).send("Something went wrong, please try again later")
             } else {
                 return res.status(200).send(`Order with ID ${id} succesfully deleted`)
             }
         })
     } else {
-        return res.status(400).send("You must provide order ID")
+        return res.status(500).send("You must provide order ID")
     }
 })
 

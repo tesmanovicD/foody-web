@@ -1,9 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import actions from '../../../../modules/actions';
+import actions from '../../../../modules/actions'
 import SelectOptions from '../../../../containers/SelectOptions'
-import TextInput from '../../../../containers/TextInput';
+import TextInput from '../../../../containers/TextInput'
 
 class ItemEdit extends Component {
 

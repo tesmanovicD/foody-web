@@ -1,8 +1,9 @@
 import React, { Component } from 'react'
-import actions from '../../modules/actions';
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
+import toastr from 'toastr'
 
 import Order from './Order'
+import actions from '../../modules/actions'
 
 class Orders extends Component {
 
@@ -14,9 +15,7 @@ class Orders extends Component {
 	componentDidMount() {
 		this.props.dispatch(actions.orders.getAllOrders())
 		.then(() => this.setState({ currentlyDisplayed: this.props.orders }))
-		.catch(err => console.log(err))
-
-		console.log(this.props.orders)
+		.catch(err => toastr.error(err.data))
 	}
 
 	componentDidUpdate(prevProps) {
@@ -38,7 +37,7 @@ class Orders extends Component {
 
 	onInputChange = (e) => {
 		let filteredOrders = this.props.orders.filter(
-			(order) => order.foodName.toLowerCase().includes(e.target.value.toLowerCase())
+			(order) => order.order_no.toString().includes(e.target.value.toLowerCase())
 		)
 		this.setState({
 			searchTerm: e.target.value,
@@ -61,7 +60,7 @@ class Orders extends Component {
 						<option>25</option>
 						<option>50</option>
 					</select> entries</span>
-					<span>Search: <input type='text' value={this.state.searchTerm} onChange={this.onInputChange} /> </span>
+					<span>Search: <input type='text' value={this.state.searchTerm} onChange={this.onInputChange} placeholder="order no"/> </span>
 				</div>
 
 				<table className='table table-stripped'>

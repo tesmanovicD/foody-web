@@ -14,7 +14,7 @@ router.get(["/", "/:id"], (req, res) => {
     
     conn.query(SELECT_COUPONS, (err, result) => {
       if (err) {
-        console.log(err)
+        return res.status(500).send("Something went wrong, please try again later")
       } else {
         if (result.length == 0) {
           return res.status(500).send("No coupons")
@@ -35,11 +35,29 @@ router.post("/add", (req, res) => {
     const ADD_COUPON = `INSERT INTO coupons (code, type, start_date, discount, usage_limit, end_date, status) 
                           VALUES ('${code}', '${discountType}', '${startDate}', ${discount}, ${usageLimit}, '${endDate}', '${status}')`
 
-    conn.query(ADD_COUPON, (err, result) => {
+    conn.query(ADD_COUPON, (err) => {
         if (err) {
-            return res.status(500).send(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
             return res.status(200).send(`Coupon ${code} added succesfully`)
+        }
+    })
+})
+
+router.put('/usageIncrement', (req, res) => {
+    const { code } = req.body
+
+    if (!code) {
+        return res.status(500).send("You must provide Coupon ID")
+    }
+
+    const UPDATE_COUPON_USAGE = `UPDATE coupons SET used_coupons= used_coupons + 1 WHERE code = "${code}" `
+
+    conn.query(UPDATE_COUPON_USAGE, (err) => {
+        if (err) {
+            return res.status(500).send("Something went wrong, please try again later")
+        } else {
+            return res.sendStatus(200)
         }
     })
 })
@@ -56,11 +74,11 @@ router.put("/edit", (req, res) => {
                             end_date= '${endDate}', status= '${status}'
                             WHERE id= ${id}`
 
-    conn.query(UPDATE_COUPON, (err, result) => {
+    conn.query(UPDATE_COUPON, (err) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
-            res.status(200).send(`Coupon ID ${id} edited succesfully`)
+            return res.status(200).send(`Coupon ID ${id} edited succesfully`)
         }
     })
 })
@@ -71,16 +89,37 @@ router.delete('/delete/:id', (req, res) => {
     if (id) {
         const DELETE_COUPON = `DELETE FROM coupons WHERE ID = ${id}`
 
-        conn.query(DELETE_COUPON, (err, result) => {
+        conn.query(DELETE_COUPON, (err) => {
             if (err) {
-                console.log(err)
+                return res.status(500).send("Something went wrong, please try again later")
             } else {
                 return res.status(200).send(`Coupon with ID ${id} succesfully deleted`)
             }
         })
     } else {
-        return res.status(400).send("You must provide coupon ID")
+        return res.status(500).send("You must provide coupon ID")
     }
+}) 
+
+router.get('/verify/:id', (req, res) => {
+    const id = req.params.id ? req.params.id : null
+
+    if (!id) {
+        return res.status(500).send("You must provide coupon ID")
+    }
+
+    const VERIFY_COUPON = `SELECT discount, type FROM coupons WHERE code= "${id}" AND status = "active" AND used_coupons < usage_limit`
+    
+    conn.query(VERIFY_COUPON, (err, result) => {
+        if (err) {
+            return res.status(500).send("Something went wrong, please try again later")
+        } else {
+            if (!result.length) {
+                return res.status(500).send(`Coupon ID ${id} is invalid/inactive`)
+            }
+            return res.status(200).send(result[0])
+        }
+    })
 })
 
 module.exports = router

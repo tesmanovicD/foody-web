@@ -2,8 +2,8 @@ import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
 import TextInput from '../../../../containers/TextInput'
-import SelectOptions from '../../../../containers/SelectOptions';
-import actions from '../../../../modules/actions';
+import SelectOptions from '../../../../containers/SelectOptions'
+import actions from '../../../../modules/actions'
 
 class CouponAdd extends Component {
 

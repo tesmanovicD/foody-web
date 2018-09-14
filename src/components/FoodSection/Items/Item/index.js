@@ -1,6 +1,7 @@
 import React from 'react'
-import Icons from '../../../../containers/Icons';
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
+import { FaEdit, FaTrashAlt } from 'react-icons/fa'
+
+import Icons from '../../../../containers/Icons'
 
 const Item = (props) => (
         <tr className='table-props'>

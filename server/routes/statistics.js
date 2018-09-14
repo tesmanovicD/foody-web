@@ -18,7 +18,7 @@ router.get('/total', (req, res) => {
     
     conn.query(GET_TOTAL_STATISTIC, (err, result) => {
         if (err) {
-            return res.status(500).send(err)
+            return res.status(500).send("Something went wrong, please try again later")
         }
 
         return res.status(200).json(...result)
@@ -41,7 +41,7 @@ router.get('/today', (req, res) => {
 
     conn.query(GET_TODAY_STATISTIC, (err, result) => {
         if (err) {
-            return res.status(500).send("error")
+            return res.status(500).send("Something went wrong, please try again later")
         }
 
         return res.status(200).json(...result)

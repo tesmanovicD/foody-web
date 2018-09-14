@@ -18,7 +18,7 @@ export default (state = initialState, action) => {
                     if (order.id === action.payload.id) {
                         return {
                             ...order,
-                            status: 'Ready'
+                            status: action.payload.status
                         }
                     }
 

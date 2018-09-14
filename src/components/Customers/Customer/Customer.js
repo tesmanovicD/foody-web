@@ -1,7 +1,7 @@
 import React from 'react'
+import { FaEdit, FaTrashAlt } from 'react-icons/fa'
 
-import { FaEdit, FaTrashAlt } from 'react-icons/fa';
-import Icons from '../../../containers/Icons';
+import Icons from '../../../containers/Icons'
 
 
 const Customer = (props) => (

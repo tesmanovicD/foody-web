@@ -1,4 +1,4 @@
-import api from '../../utils/api';
+import api from '../../utils/api'
 
 function getAllEmployee() {
     return dispatch => {
@@ -42,7 +42,6 @@ function editEmployee(id, employee) {
     return new Promise((resolve, reject) => {
         api.put('/employee/edit', {id, ...employee})
         .then(() => {
-            console.log("test");
             resolve()
         })
         .catch(err => reject(err))
@@ -53,7 +52,6 @@ function addEmployee(employee) {
     return new Promise((resolve, reject) => {
         api.post('/employee/add', employee)
         .then(() => {
-            console.log("ADDED")
             resolve()
         })
         .catch(err => reject(err))

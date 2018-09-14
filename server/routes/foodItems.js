@@ -4,13 +4,13 @@ const conn = require('../config')
 const multer = require('multer')
 const storage = multer.diskStorage({
     destination: function(req, file, cb) {
-        cb(null, "./uploads/food/");
+        cb(null, "./uploads/food/")
     },
     filename: function(req, file, cb) {
-        cb(null, Math.random().toFixed(2) + "_"+file.originalname);
+        cb(null, Math.random().toFixed(2) + "_"+file.originalname)
     }
 })
-const upload = multer({storage: storage});
+const upload = multer({storage: storage})
 
 router.get(["/", "/:id"], (req, res) => {
     const id = req.params.id ? req.params.id : null
@@ -21,7 +21,7 @@ router.get(["/", "/:id"], (req, res) => {
     
     conn.query(SELECT_FOOD_ITEMS, (err, result) => {
       if (err) {
-        console.log("err")
+        return res.status(500).send("Something went wrong, please try again later")
       } else {
         if (result.length == 0) {
           return res.status(500).send("No foods")
@@ -42,7 +42,7 @@ router.get("/category/:id", (req, res) => {
 
     conn.query(SELECT_FOOD_ITEMS_FROM_CATEGORY, (err, result) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
             if (result.length == 0) {
                 return res.status(500).send("No food in this category")
@@ -57,7 +57,7 @@ router.get("/category/:id", (req, res) => {
 
 router.post("/add", upload.single('image'), (req, res) => {
     const { name, description, category, price, quantity } = req.body
-    const image = req.file? req.file.filename : "no_image.png"; 
+    const image = req.file? req.file.filename : "no_image.png" 
 
     if (!name || !description || !category || !price || !quantity) {
         return res.status(500).send("You must fill required fields")
@@ -66,9 +66,9 @@ router.post("/add", upload.single('image'), (req, res) => {
     const ADD_FOOD_ITEM = `INSERT INTO food_items (name, description, category, image, price, quantity) 
                           VALUES ('${name}', '${description}', '${category}', '${image}', ${price}, ${quantity})`
 
-    conn.query(ADD_FOOD_ITEM, (err, result) => {
+    conn.query(ADD_FOOD_ITEM, (err) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
             return res.status(200).send(`Meal ${name} added succesfully`)
         }
@@ -86,11 +86,11 @@ router.put("/edit", (req, res) => {
                             name= "${name}", description= "${description}", price= "${price}", quantity= "${quantity}", category= "${category}"
                             WHERE id= ${id}`
 
-    conn.query(UPDATE_FOOD_ITEM, (err, result) => {
+    conn.query(UPDATE_FOOD_ITEM, (err) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
-            res.status(200).send(`Meal ID ${id} edited succesfully`)
+            return res.status(200).send(`Meal ID ${id} edited succesfully`)
         }
     })
 })
@@ -101,9 +101,9 @@ router.delete('/delete/:id', (req, res) => {
     if (id) {
         const DELETE_FOOD_ITEM = `DELETE FROM food_items WHERE id = ${id}`
 
-        conn.query(DELETE_FOOD_ITEM, (err, result) => {
+        conn.query(DELETE_FOOD_ITEM, (err) => {
             if (err) {
-                console.log(err)
+                return res.status(500).send("Something went wrong, please try again later")
             } else {
                 return res.status(200).send(`Meal with ID ${id} succesfully deleted`)
             }

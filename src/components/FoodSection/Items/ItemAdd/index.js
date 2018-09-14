@@ -24,12 +24,12 @@ class ItemAdd extends Component {
 
   handleChange = (e) => {
     if(e.target.name === 'image') {
-      let image = e.target.files[0];
-      let form = new FormData();
-      form.append('image', image);
+      let image = e.target.files[0]
+      let form = new FormData()
+      form.append('image', image)
       this.setState({
          image: form,
-      });
+      })
     }
 
     this.setState({
@@ -39,7 +39,7 @@ class ItemAdd extends Component {
 
   addItem = (e) => {
     e.preventDefault()
-    const data = new FormData(e.target);
+    const data = new FormData(e.target)
     actions.foods.addItem(data)
     .then(() => this.props.history.push('/food/items'))
   }
@@ -66,9 +66,9 @@ class ItemAdd extends Component {
               style={{display: "none"}}
               ref={(fileInput) => this.fileInput = fileInput}
             />
-            <div><button type="button" className='btn' onClick={() => this.fileInput.click()}>Dodaj avatar</button></div>  
 
-						<div className='col-sm-9 offset-md-3'>
+						<div className='col-5 offset-md-3 button button-controls'>
+              <button type="button" className='btn' onClick={() => this.fileInput.click()}>Upload image</button>
 							<button type='submit' className='btn btn-purple btn-loading'>Submit</button>
 						</div>
 					</form>

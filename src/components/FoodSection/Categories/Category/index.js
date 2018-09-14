@@ -1,6 +1,7 @@
 import React from 'react'
-import Icons from '../../../../containers/Icons';
-import { FaTrashAlt, FaEdit } from 'react-icons/fa';
+import { FaTrashAlt, FaEdit } from 'react-icons/fa'
+
+import Icons from '../../../../containers/Icons'
 
 const Category = (props) => (
         <tr className='table-props'>

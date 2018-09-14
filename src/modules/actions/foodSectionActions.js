@@ -1,4 +1,4 @@
-import api from '../../utils/api';
+import api from '../../utils/api'
 
 function getAllItems() {
     return dispatch => {
@@ -29,7 +29,6 @@ function addItem(item) {
     return new Promise((resolve, reject) => {
         api.post('/foodItems/add', item)
         .then(() => {
-            console.log("added")
             resolve()
         })
         .catch(err => reject(err))
@@ -89,7 +88,6 @@ function addCategory(category) {
     return new Promise((resolve, reject) => {
         api.post('/foodCategory/add', category)
         .then(() => {
-            console.log("added")
             resolve()
         })
         .catch(err => reject(err))
@@ -100,7 +98,6 @@ function editCategory(id, category) {
     return new Promise((resolve, reject) => {
         api.put('/foodCategory/edit', {id, ...category})
         .then(() => {
-            console.log("test");
             resolve()
         })
         .catch(err => reject(err))
@@ -113,7 +110,6 @@ function deleteCategory(id) {
             api.delete(`/foodCategory/delete/${id}`)
             .then((res) => {
                 dispatch({ type: 'DELETE_FOOD_CATEGORY', payload: {id} })
-                console.log(res)
                 resolve()
             })
             .catch(err => reject(err))

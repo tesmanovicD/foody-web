@@ -16,7 +16,7 @@ router.get(["/", "/:id"], (req, res) => {
     
     conn.query(SELECT_ORDER_PAYMENTS, (err, result) => {
       if (err) {
-        console.log(err)
+        return res.status(500).send("Something went wrong, please try again later")
       } else {
         if (result.length == 0) {
           return res.status(500).send("No order payments")
@@ -28,7 +28,7 @@ router.get(["/", "/:id"], (req, res) => {
 })
 
 router.get("/getUserOrders/:id", (req, res) => {
-    const id = req.params.id;
+    const id = req.params.id
 
     if (!id) {
         return res.status(500).send("You must provide user id")
@@ -37,10 +37,31 @@ router.get("/getUserOrders/:id", (req, res) => {
 
     conn.query(SELECT_USER_ORDERS, (err, result) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
             if (result.length == 0) {
                 return res.status(500).send("User does not have recent orders")
+            } else {
+                return res.status(200).json(result)
+            }
+        }
+    })
+})
+
+router.get("/getOrderItems/:id", (req, res) => {
+    const id = req.params.id
+
+    if (!id) {
+        return res.status(500).send("You must provide order id")
+    }
+    const SELECT_ITEMS_FOR_ORDER = `SELECT * FROM order_items WHERE id_order= ${id}`
+
+    conn.query(SELECT_ITEMS_FOR_ORDER, (err, result) => {
+        if (err) {
+            return res.status(500).send("Something went wrong, please try again later")
+        } else {
+            if (result.length == 0) {
+                return res.status(500).send("There is no items for requested order")
             } else {
                 return res.status(200).json(result)
             }
@@ -61,7 +82,7 @@ router.post("/add", (req, res) => {
 
     conn.query(ADD_ORDER_PAYMENT, (err, result) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
             const lastId = result.insertId
             return res.status(200).json({lastId})
@@ -80,11 +101,11 @@ router.put("/edit", (req, res) => {
                             price= ${price}
                             WHERE id= ${id}`
 
-    conn.query(UPDATE_ORDER_PAYMENTS, (err, result) => {
+    conn.query(UPDATE_ORDER_PAYMENTS, (err) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
-            res.status(200).send(`Order ID ${id} edited succesfully`)
+            return res.status(200).send(`Order ID ${id} edited succesfully`)
         }
     })
 })
@@ -94,7 +115,7 @@ router.put('/changeStatus', (req, res) => {
     const pickupDate = req.body.pickupDate 
 
     if (!id || !status) {
-        res.status(500).send("You must provide all required params")
+        return res.status(500).send("You must provide all required params")
     }
 
     const UPDATE_ORDER_STATUS = pickupDate ?
@@ -102,11 +123,11 @@ router.put('/changeStatus', (req, res) => {
         :
         `UPDATE order_payments SET status= "${status}" WHERE id= ${id}`
 
-    conn.query(UPDATE_ORDER_STATUS, (err, result) => {
+    conn.query(UPDATE_ORDER_STATUS, (err) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
-            res.status(200).send("Status updated")
+            return res.status(200).send("Status updated")
         }
     })
 })
@@ -117,15 +138,15 @@ router.delete('/delete/:id', (req, res) => {
     if (id) {
         const DELETE_ORDER_PAYMENT = `DELETE FROM order_payments WHERE id = ${id}`
 
-        conn.query(DELETE_ORDER_PAYMENT, (err, result) => {
+        conn.query(DELETE_ORDER_PAYMENT, (err) => {
             if (err) {
-                console.log(err)
+                return res.status(500).send("Something went wrong, please try again later")
             } else {
                 return res.status(200).send(`Order with ID ${id} succesfully deleted`)
             }
         })
     } else {
-        return res.status(400).send("You must provide order ID")
+        return res.status(500).send("You must provide order ID")
     }
 })
 

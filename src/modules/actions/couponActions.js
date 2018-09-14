@@ -1,4 +1,4 @@
-import api from '../../utils/api';
+import api from '../../utils/api'
 
 function getAllCoupons() {
     return dispatch => {
@@ -42,7 +42,6 @@ function editCoupon(id, coupon) {
     return new Promise((resolve, reject) => {
         api.put('/coupons/edit', {id, ...coupon})
         .then(() => {
-            console.log("test");
             resolve()
         })
         .catch(err => reject(err))

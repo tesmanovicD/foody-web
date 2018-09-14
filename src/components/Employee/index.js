@@ -1,10 +1,10 @@
 import React, { Component } from 'react'
-import actions from '../../modules/actions';
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
+import { FaPlus } from 'react-icons/fa'
 
+import actions from '../../modules/actions'
 import Worker from './Worker'
-import Icons from '../../containers/Icons';
-import { FaPlus } from 'react-icons/fa';
+import Icons from '../../containers/Icons'
 
 
 class Employee extends Component {
@@ -60,7 +60,7 @@ class Employee extends Component {
 						<option>25</option>
 						<option>50</option>
 					</select> entries</span>
-					<span>Search: <input type='text' onChange={this.onInputChange} value={this.state.searchTerm} /> </span>
+					<span>Search: <input type='text' onChange={this.onInputChange} value={this.state.searchTerm} placeholder="username"/> </span>
 				</div>
 
 				<table className='table table-stripped'>

@@ -1,7 +1,11 @@
 import React, { Component } from 'react'
-import actions from '../../modules/actions';
-import { connect } from 'react-redux';
-import Customer from './Customer/Customer';
+import { connect } from 'react-redux'
+import { FaPlus } from 'react-icons/fa'
+import toastr from 'toastr'
+
+import actions from '../../modules/actions'
+import Customer from './Customer/Customer'
+import Icons from '../../containers/Icons'
 
 class Customers extends Component {
 
@@ -13,7 +17,7 @@ class Customers extends Component {
 	componentDidMount() {
 		this.props.dispatch(actions.customers.getAllCustomers())
 		.then(() => this.setState({ currentlyDisplayed: this.props.customers }))
-		.catch(err => console.log(err))
+		.catch(err => toastr.error(err.data))
 	}
 	
 	componentDidUpdate(prevProps) {
@@ -47,7 +51,9 @@ class Customers extends Component {
 		<div className="card">
 			<div className="card-header">
 				<h6 className="card-title">Customer Management</h6>
-				<div className="clearfix"></div>
+				<button className='btn btn-primary btn-sm' onClick={() => this.props.history.push('/customers/add')}>
+					<Icons size={14} color="white"><FaPlus /></Icons>Add Customer
+				</button>
 			</div>
 			<div className="card-body">
 				<div className='card-control'>
@@ -55,7 +61,8 @@ class Customers extends Component {
 						<option>25</option>
 						<option>50</option>
 					</select> entries</span>
-					<span>Search: <input type='text' value={this.state.searchTerm} onChange={this.onInputChange} /> </span>
+					<span>Search: <input type='text' value={this.state.searchTerm} onChange={this.onInputChange} placeholder="firstname" />
+					</span>
 				</div>
 
 				<table className='table table-stripped'>

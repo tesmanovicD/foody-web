@@ -1,8 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 
-import StatisticItem from './StatisticItem';
-import actions from '../../modules/actions';
+import StatisticItem from './StatisticItem'
+import actions from '../../modules/actions'
 
 class Dashboard extends Component {
 

@@ -1,7 +1,10 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import toastr from 'toastr'
 
 import actions from '../../modules/actions'
+
+
 class Login extends Component {
 
 	state = {
@@ -30,10 +33,10 @@ class Login extends Component {
 
 	handleLogin = (e) => {
 		const { username, password } = this.state
-		e.preventDefault();
+		e.preventDefault()
 		this.props.dispatch(actions.users.authenticateUser(username, password))
 		.then(() => this.props.history.push('/'))
-		.catch(err => console.log(err))
+		.catch(err => toastr.error(err.data))
 	}
 
   render() {

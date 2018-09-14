@@ -1,6 +1,7 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import moment from 'moment'
+import toastr from 'toastr'
 
 import actions from '../../../modules/actions'
 import TextInput from '../../../containers/TextInput'
@@ -9,7 +10,9 @@ class OrderReview extends Component {
 
   state = {
     order: null,
-    isDisabled: true
+    isDisabled: true,
+    orderItems: [],
+    showOrderItems: false
   }
 
   getOrder = (id) => {
@@ -24,15 +27,24 @@ class OrderReview extends Component {
         },
         isDisabled 
       })
+      this.getItemsFromOrder(id)
     })
     .catch(err => {
-      alert(`No order with ID ${id}`)
+      toastr.error(err.data)
       this.props.history.push('/orders')
     })
   }
 
+  getItemsFromOrder = (id) => {
+    actions.orders.getItemsForOrder(id)
+    .then(orderItems => {
+      this.setState({ orderItems })
+    })
+    .catch(err => toastr.error(err.data))
+  }
+
   acceptOrder = (e) => {
-    e.preventDefault();
+    e.preventDefault()
     const { order } = this.state
     //Get current date and add 20min on it
     const pickupDate = moment().add(20,'m').format('YYYY-MM-DD hh:mm:ss')
@@ -41,7 +53,15 @@ class OrderReview extends Component {
     .then(() => {
       this.getOrder(this.props.match.params.id)
     })
-    .catch(err => console.log(err))
+    .catch(err => toastr.error(err.data))
+  }
+
+  cancelOrder = () => {
+    const { order } = this.state
+
+    this.props.dispatch(actions.orders.cancelOrder(order.id, order.id_customer, order.order_no))
+    .then(() => this.getOrder(this.props.match.params.id))
+    .catch(err => toastr.error(err.data))
   }
 
   handleChange = (e) => {
@@ -53,13 +73,14 @@ class OrderReview extends Component {
     })
   }
 
+  showOrderItems = () => this.setState({ showOrderItems: !this.state.showOrderItems })
+
   componentDidMount() {
     this.getOrder(this.props.match.params.id)
   }
 
   render() {
-    const { order } = this.state
-    const { isDisabled } = this.state
+    const { order, isDisabled, showOrderItems } = this.state
     return (
       <section>
       {this.state.order ?
@@ -74,17 +95,46 @@ class OrderReview extends Component {
             <TextInput name='fname' label='First Name' defVal={order.fname} disabled />
             <TextInput name='lname' label='Last Name' defVal={order.lname} disabled />
             <TextInput name='price' type='number' label='Price' defVal={order.price} disabled />
-            <TextInput name='orderDate' type='date' label='Order Date' defVal={order.date} disabled  />
-            {!isDisabled && 
-            <div className='col-sm-9 offset-md-3'>
-              <button type='submit' className='btn btn-purple btn-loading'>Submit</button>
+            <TextInput name='orderDate' type='date' label='Order Date' defVal={order.date} disabled  /> 
+            <div className="order-control col-5 offset-3">
+              <button type='button' className='btn btn-purple btn-loading' onClick={this.showOrderItems}>
+                {!showOrderItems ? "Show ordered items" : "Hide order items"}
+              </button>
+              
+              {!isDisabled && <button type='button' className='btn btn-purple btn-loading' onClick={this.cancelOrder}>Cancel</button>}
+              {!isDisabled && <button type='submit' className='btn btn-purple btn-loading'>Submit</button>}
             </div>
+
+            {showOrderItems &&
+            <table className="table table-bordered table-striped col-sm-7 offset-sm-2">
+              <thead>
+                <tr>
+                  <th>#</th>
+                  <th>item</th>
+                  <th>unit price</th>
+                  <th>quantity</th>
+                  <th>total price</th>
+                </tr>
+              </thead>
+              <tbody>
+              {this.state.orderItems.map((orderItem, key) => (
+                    <tr key={orderItem.id}>
+                      <td>{key}</td>
+                      <td>{orderItem.item}</td>
+                      <td>$ {orderItem.price.toFixed(2)}</td>
+                      <td>{orderItem.quantity}</td>   
+                      <td>$ {orderItem.total.toFixed(2)}</td>   
+                    </tr>
+              ))
+              }
+              </tbody>
+              </table>
             }
           </form>
         </div>
       </div>
       :
-      <div>cnageme</div>
+      <div>There is no orders</div>
       }
       </section>
     )

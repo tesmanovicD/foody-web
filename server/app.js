@@ -19,9 +19,13 @@ app.options("*", cors())
 app.use(bodyParser.json())
 app.use(bodyParser.urlencoded({ extended: true }))
 app.use('/', routes)
-app.use('/uploads/food', express.static("uploads/food"));
+app.use('/uploads/food', express.static("uploads/food"))
+app.use('/uploads/category', express.static("uploads/category"))
 
-app.listen(PORT, () => {
+app.listen(PORT, (err) => {
+    if (err) {
+        return res.status(500).send("Connection lost: The server closed the connetion")
+    }
     console.log(`Listening on port ${PORT}`)
 })
 

@@ -1,5 +1,6 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
+import toastr from 'toastr'
 
 import TextInput from '../../../../containers/TextInput'
 import actions from '../../../../modules/actions'
@@ -10,10 +11,20 @@ class CategoryAdd extends Component {
     category: {
         name: '',
         description: '',
+        image: ''
     }
   }
 
   handleChange = (e) => {
+    if(e.target.name === 'image') {
+      let image = e.target.files[0]
+      let form = new FormData()
+      form.append('image', image)
+      this.setState({
+         image: form,
+      })
+    }
+
     this.setState({
       category: { ...this.state.category, [e.target.name]: e.target.value }
     })
@@ -21,9 +32,12 @@ class CategoryAdd extends Component {
 
   addCategory = (e) => {
     e.preventDefault()
-    actions.foods.addCategory(this.state.category)
+    const data = new FormData(e.target)
+    actions.foods.addCategory(data)
     .then(() => this.props.history.push('/food/categories'))
+    .catch(err => toastr.error(err.data))
   }
+
 
   render() {
     const { category } = this.state
@@ -37,8 +51,16 @@ class CategoryAdd extends Component {
         <form onSubmit={this.addCategory}>
           <TextInput name='name' label='Name' defVal={category.name} action={this.handleChange.bind(this)} />
           <TextInput name='description' label='Description' defVal={category.description} action={this.handleChange.bind(this)} />
-          <div className='col-sm-9 offset-md-3'>
-            <button type='submit' className='btn btn-purple btn-loading'>Submit</button>
+          <input
+              type="file"
+              name="image"
+              onChange={this.handleInputChange}
+              style={{display: "none"}}
+              ref={(fileInput) => this.fileInput = fileInput}
+            />
+            <div className='col-5 offset-md-3 button button-controls'>
+              <button type="button" className='btn' onClick={() => this.fileInput.click()}>Upload image</button>
+              <button type='submit' className='btn btn-purple btn-loading'>Submit</button>
           </div>
         </form>
         </div>

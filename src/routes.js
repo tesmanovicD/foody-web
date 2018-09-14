@@ -1,9 +1,9 @@
-import React from 'react';
-import { Switch, Route } from 'react-router-dom';
+import React from 'react'
+import { Switch, Route } from 'react-router-dom'
 
-import Login from "./components/Login";
-import Home from "./components/Home";
-import Mobile from './Mobile';
+import Login from "./components/Login"
+import Home from "./components/Home"
+import Mobile from './Mobile'
 
 const routes = (
     <Switch>
@@ -13,4 +13,4 @@ const routes = (
     </Switch>
 )
 
-export default routes;
+export default routes

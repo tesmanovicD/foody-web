@@ -1,17 +1,23 @@
 import React, { Component } from 'react'
-import actions from '../../modules/actions';
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
+import { FaPlus } from 'react-icons/fa'
+import toastr from 'toastr'
 
-import Coupon from './Coupon';
-import Icons from '../../containers/Icons';
-import { FaPlus } from 'react-icons/fa';
+import Coupon from './Coupon'
+import actions from '../../modules/actions'
+import Icons from '../../containers/Icons'
 
 class Coupons extends Component {
 
+	state = {
+		searchTerm: '',
+		currentlyDisplayed: []
+	}
+
 	componentDidMount() {
 		this.props.dispatch(actions.coupons.getAllCoupons())
-		.then(() => this.setState({ loaded: true }))
-		.catch(err => console.log(err))
+		.then(() => this.setState({ currentlyDisplayed: this.props.coupons }))
+		.catch(err => toastr.error(err.data))
 	}
 
 	deleteCoupon = (id) => {
@@ -20,6 +26,16 @@ class Coupons extends Component {
 
 	editCoupon = (id) => {
 		this.props.history.push(`/coupons/edit/${id}`)
+	}
+
+	onInputChange = (e) => {
+		let filteredCategories = this.props.coupons.filter(
+			(coupon) => coupon.code.toLowerCase().includes(e.target.value.toLowerCase())
+		)
+		this.setState({
+			searchTerm: e.target.value,
+			currentlyDisplayed: filteredCategories
+		})
 	}
 
   render() {
@@ -39,7 +55,7 @@ class Coupons extends Component {
 							<option>25</option>
 							<option>50</option>
 						</select> entries</span>
-						<span>Search: <input type='text' /> </span>
+						<span>Search: <input type='text' value={this.state.searchTerm} onChange={this.onInputChange} placeholder="code" /> </span>
 					</div>
 
 					<table className='table table-stripped'>
@@ -49,8 +65,9 @@ class Coupons extends Component {
 							</tr>
 						</thead>
 						<tbody>
-							{this.props.coupons.length ?
-								this.props.coupons.map(c => <Coupon key={c.id} coupon={c} deleteCoupon={this.deleteCoupon} editCoupon={this.editCoupon} />)
+							{this.state.currentlyDisplayed.length ?
+								this.state.currentlyDisplayed.map(c => 
+									<Coupon key={c.id} coupon={c} deleteCoupon={this.deleteCoupon} editCoupon={this.editCoupon} />)
 								:
 								<tr className='table-props'>
 									<td colSpan={tableRows.length} className='text-center'>No data available in table</td>

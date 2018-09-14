@@ -4,31 +4,28 @@ import { connect } from 'react-redux'
 import actions from '../../../modules/actions'
 import TextInput from '../../../containers/TextInput'
 
-class CustomerEdit extends Component {
+class CustomerAdd extends Component {
 
   state = {
-    customer: ''
-  }
-
-	getCustomer = (id) => {
-    actions.customers.getSingleCustomer(id)
-    .then(customer => this.setState({ customer }))
+    customer: {
+        fname: '',
+        lname: '',
+        email: '',
+        phone: '',
+        password: ''
+    }
   }
 
   handleChange = (e) => {
     this.setState({
-      customer: {...this.state.customer, [e.target.name]: e.target.value}
+      customer: { ...this.state.customer, [e.target.name]: e.target.value }
     })
   }
 
-  submitEditedCustomer = (e) => {
+  AddCustomer = (e) => {
     e.preventDefault()
-    actions.customers.editCustomer(this.props.match.params.id, this.state.customer)
+    actions.customers.addCustomer(this.state.customer)
     .then(() => this.props.history.push('/customers'))
-  }
-  
-  componentDidMount() {
-    this.getCustomer(this.props.match.params.id)
   }
 
   render() {
@@ -37,14 +34,15 @@ class CustomerEdit extends Component {
     return (
       <div className="card">
         <div className="card-header">
-          <h6 className="card-title">Edit Customer</h6>
+          <h6 className="card-title">Add Customer</h6>
         </div>
         <div className="card-body">
-        <form onSubmit={this.submitEditedCustomer}>
+        <form onSubmit={this.AddCustomer}>
           <TextInput name='fname' label='First Name' defVal={customer.fname} action={this.handleChange.bind(this)} />
           <TextInput name='lname' label='Last Name' defVal={customer.lname} action={this.handleChange.bind(this)} />
-          <TextInput name='email' type='email' label='Email' defVal={customer.email} action={this.handleChange.bind(this)} />
-          <TextInput name='phone' type='phone' label='Phone' defVal={customer.phone} action={this.handleChange.bind(this)} />
+          <TextInput name='email' type="email" label='Email' defVal={customer.email} action={this.handleChange.bind(this)} />
+          <TextInput name='phone' label='Phone' defVal={customer.phone} action={this.handleChange.bind(this)} />
+          <TextInput name='password' label='Password' type='password' defVal={customer.password} action={this.handleChange.bind(this)} />
           <div className='col-sm-9 offset-md-3'>
             <button type='submit' className='btn btn-purple btn-loading'>Submit</button>
           </div>
@@ -61,4 +59,4 @@ const mapStateToProps = (state) => {
 	}
 }
 
-export default connect(mapStateToProps)(CustomerEdit) 
+export default connect(mapStateToProps)(CustomerAdd) 

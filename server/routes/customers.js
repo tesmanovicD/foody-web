@@ -12,7 +12,7 @@ router.get(["/", "/:id"], (req, res) => {
     
     conn.query(SELECT_CUSTOMERS, (err, result) => {
       if (err) {
-        console.log(err)
+        return res.status(500).send("Something went wrong, please try again later")
       } else {
         if (result.length == 0) {
           return res.status(500).send("No customers")
@@ -34,9 +34,9 @@ router.post("/add", (req, res) => {
     const ADD_CUSTOMER = `INSERT INTO customers (email, password, phone, fname, lname) 
                           VALUES ('${email}', '${hashedPassword}', '${phone}', '${fname}', '${lname}')`
 
-    conn.query(ADD_CUSTOMER, (err, result) => {
+    conn.query(ADD_CUSTOMER, (err) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
             return res.status(200).send(`Customer ${fname} ${lname} added succesfully`)
         }
@@ -44,21 +44,21 @@ router.post("/add", (req, res) => {
 })
 
 router.put("/edit", (req, res) => {
-    const { id, email, password, fname, lname, phone } = req.body
+    const { id, email, fname, lname, phone } = req.body
 
-    if (!id || !email || !password || !fname || !lname) {
+    if (!id || !email || !fname || !lname) {
         return res.status(500).send("You must fill required fields")
     }
 
     const UPDATE_CUSTOMER = `UPDATE customers SET 
-                            email= "${email}", password= "${password}", phone= "${phone}", fname= "${fname}", lname= "${lname}"
+                            email= "${email}", phone= "${phone}", fname= "${fname}", lname= "${lname}"
                             WHERE id= ${id}`
 
-    conn.query(UPDATE_CUSTOMER, (err, result) => {
+    conn.query(UPDATE_CUSTOMER, (err) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
-            res.status(200).send(`Customer ID ${id} edited succesfully`)
+            return res.status(200).send(`Customer ID ${id} edited succesfully`)
         }
     })
 })
@@ -69,21 +69,20 @@ router.delete('/delete/:id', (req, res) => {
     if (id) {
         const DELETE_CUSTOMER = `DELETE FROM customers WHERE ID = ${id}`
 
-        conn.query(DELETE_CUSTOMER, (err, result) => {
+        conn.query(DELETE_CUSTOMER, (err) => {
             if (err) {
-                console.log(err)
+                return res.status(500).send("Something went wrong, please try again later")
             } else {
                 return res.status(200).send(`Customer with ID ${id} succesfully deleted`)
             }
         })
     } else {
-        return res.status(400).send("You must provide customer ID")
+        return res.status(500).send("You must provide customer ID")
     }
 })
 
 router.post('/authenticate', (req, res) => {
     const { email, password } = req.body
-    console.log(req.body)
 
     if ( !email || !password) {
         return res.status(500).send("You must enter email and password")
@@ -93,7 +92,7 @@ router.post('/authenticate', (req, res) => {
     const AUTHENTICATE_USER = `SELECT id, fname, lname FROM customers WHERE email = "${email}" AND password = "${hashedPassword}" `
     conn.query(AUTHENTICATE_USER, (err, result) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
             if (result.length == 0) {
                 return res.status(500).send("Wrong email or password")

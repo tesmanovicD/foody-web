@@ -1,7 +1,9 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import actions from '../../../modules/actions';
-import TextInput from '../../../containers/TextInput';
+import toastr from 'toastr'
+
+import actions from '../../../modules/actions'
+import TextInput from '../../../containers/TextInput'
 
 class EmployeAdd extends Component {
 
@@ -24,6 +26,7 @@ class EmployeAdd extends Component {
     e.preventDefault()
     actions.employee.addEmployee(this.state.employee)
     .then(() => this.props.history.push('/employee'))
+    .catch(err => toastr.error(err.data))
   }
 
   render() {

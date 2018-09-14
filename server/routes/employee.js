@@ -1,6 +1,7 @@
 const express = require('express')
 const router = express.Router()
 const conn = require('../config')
+const helper = require('../helper')
 
 
 router.get(["/", "/:id"], (req, res) => {
@@ -12,7 +13,7 @@ router.get(["/", "/:id"], (req, res) => {
     
     conn.query(SELECT_EMPLOYEE, (err, result) => {
       if (err) {
-        console.log(err)
+        return res.status(500).send("Something went wrong, please try again later")
       } else {
         if (result.length == 0) {
           return res.status(500).send("No employee")
@@ -30,12 +31,13 @@ router.post("/add", (req, res) => {
         return res.status(500).send("You must fill required fields")
     }
 
+    const hashedPassword = helper.saltHashPassword(password)
     const ADD_EMPLOYEE = `INSERT INTO employee (username, password, fname, lname) 
-                          VALUES ('${username}', '${password}', '${fname}', '${lname}')`
+                          VALUES ('${username}', '${hashedPassword}', '${fname}', '${lname}')`
 
-    conn.query(ADD_EMPLOYEE, (err, result) => {
+    conn.query(ADD_EMPLOYEE, (err) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
             return res.status(200).send(`Employee ${fname} ${lname} added succesfully`)
         }
@@ -43,21 +45,21 @@ router.post("/add", (req, res) => {
 })
 
 router.put("/edit", (req, res) => {
-    const { id, username, password, fname, lname } = req.body
+    const { id, username, fname, lname } = req.body
 
-    if (!id || !username || !password || !fname || !lname) {
+    if (!id || !username || !fname || !lname) {
         return res.status(500).send("You must fill required fields")
     }
 
     const UPDATE_EMPLOYEE = `UPDATE employee SET 
-                            username= "${username}", password= "${password}", fname= "${fname}", lname= "${lname}"
+                            username= "${username}", fname= "${fname}", lname= "${lname}"
                             WHERE id= ${id}`
 
-    conn.query(UPDATE_EMPLOYEE, (err, result) => {
+    conn.query(UPDATE_EMPLOYEE, (err) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
-            res.status(200).send(`Employee ID ${id} edited succesfully`)
+            return res.status(200).send(`Employee ID ${id} edited succesfully`)
         }
     })
 })
@@ -68,15 +70,15 @@ router.delete('/delete/:id', (req, res) => {
     if (id) {
         const DELETE_EMPLOYEE = `DELETE FROM employee WHERE id = ${id}`
 
-        conn.query(DELETE_EMPLOYEE, (err, result) => {
+        conn.query(DELETE_EMPLOYEE, (err) => {
             if (err) {
-                console.log(err)
+                return res.status(500).send("Something went wrong, please try again later")
             } else {
                 return res.status(200).send(`Employee with ID ${id} succesfully deleted`)
             }
         })
     } else {
-        return res.status(400).send("You must provide employee ID")
+        return res.status(500).send("You must provide employee ID")
     }
 })
 
@@ -87,10 +89,11 @@ router.post('/authenticate', (req, res) => {
         return res.status(500).send("You must enter username and password")
     }
 
-    const AUTHENTICATE_USER = `SELECT id, fname, lname FROM employee WHERE username = "${username}" AND password = "${password}" `
+    const hashedPassword = helper.saltHashPassword(password)
+    const AUTHENTICATE_USER = `SELECT id, fname, lname FROM employee WHERE username = "${username}" AND password = "${hashedPassword}" `
     conn.query(AUTHENTICATE_USER, (err, result) => {
         if (err) {
-            console.log(err)
+            return res.status(500).send("Something went wrong, please try again later")
         } else {
             if (result.length == 0) {
                 return res.status(500).send("Wrong username or password")

@@ -1,4 +1,4 @@
-import api from '../../utils/api';
+import api from '../../utils/api'
 
 function getAllCustomers() {
     return dispatch => {
@@ -27,6 +27,16 @@ function getSingleCustomer(id) {
     })
 }
 
+function addCustomer(customer) {
+    return new Promise((resolve, reject) => {
+        api.post('/customers/add', customer)
+        .then(() => {
+            resolve()
+        })
+        .catch(err => reject(err))
+    })
+}
+
 function deleteCustomer(id) {
     return dispatch => {
         return new Promise((resolve, reject) => {
@@ -44,7 +54,6 @@ function editCustomer(id, customer) {
     return new Promise((resolve, reject) => {
         api.put('/customers/edit', {id, ...customer})
         .then(() => {
-            console.log("test");
             resolve()
         })
         .catch(err => reject(err))
@@ -54,6 +63,7 @@ function editCustomer(id, customer) {
 export default {
     getAllCustomers,
     getSingleCustomer,
+    addCustomer,
     deleteCustomer,
     editCustomer,
 }

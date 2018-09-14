@@ -1,7 +1,7 @@
 import React from 'react'
+import { FaTrashAlt, FaEdit } from 'react-icons/fa'
 
 import Icons from '../../../containers/Icons'
-import { FaTrashAlt, FaEdit } from 'react-icons/fa'
 
 
 const Worker = (props) => (

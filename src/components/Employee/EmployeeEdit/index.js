@@ -1,7 +1,8 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
-import actions from '../../../modules/actions';
-import TextInput from '../../../containers/TextInput';
+
+import actions from '../../../modules/actions'
+import TextInput from '../../../containers/TextInput'
 
 class EmployeeEdit extends Component {
 

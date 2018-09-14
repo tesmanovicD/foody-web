@@ -1,30 +1,35 @@
 import React, { Component } from 'react'
 import { connect } from 'react-redux'
 import { Switch, Route } from 'react-router-dom'
-import { FaUserCircle } from 'react-icons/fa';
+import { FaUserCircle } from 'react-icons/fa'
 
 import actions from '../../modules/actions'
-import Navigation from '../Navigation';
+import Navigation from '../Navigation'
 import Customers from '../Customers'
+import CustomerAdd from '../Customers/CustomerAdd'
 import CustomerEdit from '../Customers/CustomerEdit'
-import Employee from '../Employee';
-import Orders from '../Orders';
-import Coupons from '../Coupons';
-import EmployeeEdit from '../Employee/EmployeeEdit';
-import EmployeeAdd from '../Employee/EmployeeAdd';
-import Categories from '../FoodSection/Categories';
-import CategoryAdd from '../FoodSection/Categories/CategoryAdd';
-import CategoryEdit from '../FoodSection/Categories/CategoryEdit';
-import Items from '../FoodSection/Items';
-import ItemAdd from '../FoodSection/Items/ItemAdd';
-import ItemEdit from '../FoodSection/Items/ItemEdit';
-import CouponAdd from '../Coupons/Coupon/CouponAdd';
-import CouponEdit from '../Coupons/Coupon/CouponEdit';
-import Icons from '../../containers/Icons';
-import Dashboard from '../Dashboard';
-import OrderReview from '../Orders/OrderReview';
+import Employee from '../Employee'
+import Orders from '../Orders'
+import Coupons from '../Coupons'
+import EmployeeEdit from '../Employee/EmployeeEdit'
+import EmployeeAdd from '../Employee/EmployeeAdd'
+import Categories from '../FoodSection/Categories'
+import CategoryAdd from '../FoodSection/Categories/CategoryAdd'
+import CategoryEdit from '../FoodSection/Categories/CategoryEdit'
+import Items from '../FoodSection/Items'
+import ItemAdd from '../FoodSection/Items/ItemAdd'
+import ItemEdit from '../FoodSection/Items/ItemEdit'
+import CouponAdd from '../Coupons/Coupon/CouponAdd'
+import CouponEdit from '../Coupons/Coupon/CouponEdit'
+import Icons from '../../containers/Icons'
+import Dashboard from '../Dashboard'
+import OrderReview from '../Orders/OrderReview'
 
 class Home extends Component {
+
+  state = {
+    userMenuToggled: false
+  }
 
   logoutUser = () => {
     this.props.dispatch(actions.users.logoutUser())
@@ -33,21 +38,23 @@ class Home extends Component {
 
   toggleHiddenItem = (e, item) => {
     e.preventDefault()
-    let target = document.getElementById(`${item}-nav`);
-    target[1].style.backgroundColor = "yellow";
+    let target = document.getElementById(`${item}-nav`)
+    target[1].style.backgroundColor = "yellow"
   }
 
   initializeOneSignal = () => {
-    var OneSignal = window.OneSignal || [];
+    var OneSignal = window.OneSignal || []
     OneSignal.push(function() {
       OneSignal.init({
         appId: "74723254-f9b6-4f24-bde3-5835a592f71e",
-      });
+      })
       OneSignal.sendTags({
         rule: 'Chef',
-      });
-    });
+      })
+    })
   }
+
+  toggleUserMenu = () => this.setState({ userMenuToggled: !this.state.userMenuToggled })
 
   componentWillMount() {
     this.initializeOneSignal()
@@ -61,7 +68,15 @@ class Home extends Component {
           <h5 className='header-title'>Foody Cart</h5>
 
           <div className='header-account'>
-            <span><Icons size={35} color="white"><FaUserCircle /></Icons></span>
+            <span onClick={this.toggleUserMenu}><Icons size={35} color="white"><FaUserCircle /></Icons></span>
+            {this.state.userMenuToggled &&
+              <ul className="dropdown-user-menu">
+                  <li><span>My account</span></li>
+                  <li><span>Change password</span></li>
+                  <li role="separator" className="divider"></li>
+                  <li><span onClick={ this.logoutUser }>Log out</span></li>
+              </ul>
+            }
           </div>
         </div>
 
@@ -75,6 +90,7 @@ class Home extends Component {
               <Route exact path='/' component={Dashboard} />
               <Route exact path='/customers' component={Customers} />
               <Route path='/customers/edit/:id' component={CustomerEdit} />
+              <Route path='/customers/add' component={CustomerAdd} />
               <Route exact path='/employee' component={Employee} />
               <Route path='/employee/edit/:id' component={EmployeeEdit} />
               <Route path='/employee/add' component={EmployeeAdd} />
@@ -92,7 +108,6 @@ class Home extends Component {
             </Switch>
           </div>
         </div>
-        <button onClick={ this.logoutUser }>Logout</button>
       </div>
     )
   }

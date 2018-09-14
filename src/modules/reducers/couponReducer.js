@@ -13,9 +13,6 @@ export default (state = initialState, action) => {
                 coupons: action.payload.coupons
             }
         case ADD_COUPON:
-        console.log(action.payload.coupon)
-        console.log(action.payload)
-
             return {
                 coupons: [...state.coupons, action.payload.coupon]
             }

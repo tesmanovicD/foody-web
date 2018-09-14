@@ -1,10 +1,11 @@
 import React, { Component } from 'react'
-import { connect } from 'react-redux';
+import { connect } from 'react-redux'
+import toastr from 'toastr'
+import { FaPlus } from 'react-icons/fa'
 
-import Category from './Category';
-import actions from '../../../modules/actions';
-import Icons from '../../../containers/Icons';
-import { FaPlus } from 'react-icons/fa';
+import Category from './Category'
+import actions from '../../../modules/actions'
+import Icons from '../../../containers/Icons'
 
 class Categories extends Component {
 
@@ -16,7 +17,7 @@ class Categories extends Component {
 	componentDidMount() {
 		this.props.dispatch(actions.foods.getAllCategories())
 		.then(() => this.setState({ currentlyDisplayed: this.props.categories }))
-		.catch(err => console.log(err))
+		.catch(err => toastr.error(err.data))
 	}
 
 	componentDidUpdate(prevProps) {
@@ -60,7 +61,7 @@ class Categories extends Component {
 							<option>25</option>
 							<option>50</option>
 						</select> entries</span>
-						<span>Search: <input type='text' value={this.state.searchTerm} onChange={this.onInputChange} /> </span>
+						<span>Search: <input type='text' value={this.state.searchTerm} onChange={this.onInputChange} placeholder="name" /> </span>
 					</div>
 
 					<table className='table table-stripped'>

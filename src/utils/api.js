@@ -6,7 +6,7 @@ const instance = axios.create({
     baseURL: apiBase,
     timeout: 60000
 })
-axios.defaults.headers.post['Authorization'] = 'Basic NjEyMzZmYzItNzgyZS00MGJhLTkxNDUtMjBkZWI5MWI5MTc1';
+axios.defaults.headers.post['Authorization'] = 'Basic NjEyMzZmYzItNzgyZS00MGJhLTkxNDUtMjBkZWI5MWI5MTc1'
 
 const request = (method, url, data) => {
     return new Promise((resolve, reject) => {
